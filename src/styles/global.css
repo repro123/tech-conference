@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
-@theme {
+@theme inline {
+  --font-jetbrains: var(--font-jetbrains-mono);
+  --font-chakra: var(--font-chakra-petch);
   --color-neutral-900: #00151d;
   --color-neutral-800: #001a24;
   --color-neutral-600: #33444a;
@@ -20,73 +22,86 @@
   font-size: 5rem;
   line-height: 100%;
   font-weight: 700;
+  font-family: var(--font-chakra);
 }
 
 @utility preset-1-mobile {
   font-size: 2.375rem;
   line-height: 100%;
   font-weight: 700;
+  font-family: var(--font-chakra);
 }
 
 @utility preset-2 {
   font-size: 2rem;
   line-height: 120%;
   font-weight: 700;
+  font-family: var(--font-chakra);
 }
 
 @utility preset-2-tablet {
   font-size: 28px;
   line-height: 110%;
   font-weight: 700;
+  font-family: var(--font-chakra);
 }
 
 @utility preset-2-mobile {
   font-size: 1.5rem;
   line-height: 110%;
   font-weight: 700;
+  font-family: var(--font-chakra);
 }
 
 @utility preset-3 {
   font-size: 1.5rem;
   line-height: 130%;
   font-weight: 700;
+  font-family: var(--font-chakra);
 }
 
 @utility preset-4 {
   font-size: 1.25rem;
   line-height: 140%;
   font-weight: 700;
+  font-family: var(--font-chakra);
 }
 
 @utility preset-5 {
+  font-family: var(--font-jetbrains);
   font-size: 1rem;
   line-height: 140%;
 }
 
 @utility preset-5-bold {
+  font-family: var(--font-jetbrains);
   font-size: 1rem;
   line-height: 140%;
   font-weight: 700;
 }
 
 @utility preset-6 {
+  font-family: var(--font-jetbrains);
   font-size: 0.875rem;
   line-height: 140%;
 }
 
 @utility preset-6-medium {
+  font-family: var(--font-jetbrains);
   font-size: 0.875em;
   line-height: 140%;
   font-weight: 600;
 }
 
 @utility preset-6-extrabold {
+  font-family: var(--font-jetbrains);
   font-size: 0.875em;
   line-height: 140%;
   font-weight: 900;
 }
 
 @utility preset-7 {
+  font-family: var(--font-jetbrains);
   font-size: 0.75rem;
   line-height: 140%;
 }
