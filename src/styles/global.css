@@ -3,6 +3,9 @@
 @theme inline {
   --font-jetbrains: var(--font-jetbrains-mono);
   --font-chakra: var(--font-chakra-petch);
+}
+
+@theme {
   --color-neutral-900: #00151d;
   --color-neutral-800: #001a24;
   --color-neutral-600: #33444a;
@@ -16,6 +19,28 @@
   --color-cyan: #b5e9fc;
   --color-purple: #ccc4fd;
   --color-blue: #bbd8ff;
+}
+
+@layer components {
+  [data-variant="nav"] {
+    --button-bg: var(--color-neutral-900);
+    --button-text: var(--color-neutral-100);
+    --button-border: var(--color-neutral-100);
+    --button-shadow: var(--color-neutral-900);
+    --button-hover-bg: var(--color-neutral-900);
+    --button-hover-text: var(--color-neutral-100);
+    --button-hover-border: var(--color-neutral-100);
+    --button-hover-shadow: var(--color-neutral-100);
+    --button-active-bg: var(--color-neutral-900);
+    --button-active-text: var(--color-neutral-100);
+    --button-active-shadow: var(--color-green);
+  }
+  [data-variant="nav"][aria-current="page"] {
+    --button-bg: var(--color-neutral-900);
+    --button-text: var(--color-green);
+    --button-border: var(--color-green);
+    --button-shadow: var(--color-green);
+  }
 }
 
 @utility preset-1 {
@@ -104,4 +129,10 @@
   font-family: var(--font-jetbrains);
   font-size: 0.75rem;
   line-height: 140%;
+}
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
 }
