@@ -1,0 +1,13 @@
+---
+interface Props {
+  class?: string;
+  text: string;
+}
+
+const { class: className = "", text } = Astro.props;
+---
+
+<h2 class={`flex flex-row uppercase gap-2 ${className}`}>
+  <span>//</span>
+  <span>{text}</span>
+</h2>

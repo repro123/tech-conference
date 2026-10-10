@@ -1,0 +1,24 @@
+---
+import LogoSVG from "@/components/svgs/LogoSVG.astro";
+import SecondaryHeading from "@/components/ui/SecondaryHeading.astro";
+
+import Navigate from "@/components/footer/Navigate.astro";
+import Track from "@/components/footer/Track.astro";
+import Venue from "@/components/footer/Venue.astro";
+---
+
+<div class="flex flex-col gap-6 lg:flex-row lg:justify-between py-4 preset-6">
+  <div class="flex flex-col gap-8 lg:max-w-prose">
+    <LogoSVG />
+
+    <p>A three-day conference for engineers who build the interfaces humans use every day.</p>
+  </div>
+
+  <div class="flex flex-col md:flex-row md:justify-between gap-6 md:gap-12">
+    <Navigate />
+
+    <Track />
+
+    <Venue />
+  </div>
+</div>
