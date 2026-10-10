@@ -2,23 +2,39 @@
 import Container from "@/layouts/Container.astro";
 import LogoSVG from "@/components/svgs/LogoSVG.astro";
 
-import { navlinks, type Navlink } from "@/lib/data/navlinks";
+import { navlinks } from "@/lib/data/navlinks";
+import MobileMenu from "@/components/client/MobileMenu";
+import Button from "@/components/ui/Button";
+
+const pathName = Astro.url.pathname;
 ---
 
 <header class="py-4">
-  <Container class="flex items-center justify-between gap-4">
+  <Container class="flex items-center justify-between gap-4 preset-6-medium text-white">
     <a href="/" aria-label="Tech Conference Home"><LogoSVG /></a>
 
-    <nav class="text-white">
+    <nav class="hidden md:block">
       <ul class="flex items-center gap-4">
         {
           navlinks.map((link) => (
             <li>
-              <a href={`/${link}`}>{link}</a>
+              <Button
+                variant="nav"
+                aria-current={pathName === link.href ? "page" : undefined}
+                href={link.href}
+                className=""
+                size="sm"
+              >
+                {link.label}
+              </Button>
             </li>
           ))
         }
       </ul>
     </nav>
+
+    <div class="md:hidden">
+      <MobileMenu client:load pathName={pathName} />
+    </div>
   </Container>
 </header>
