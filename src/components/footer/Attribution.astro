@@ -1,0 +1,27 @@
+---
+import { MoveUp } from "@lucide/astro";
+---
+
+<div
+  class="border-t border-neutral-600 py-2 flex flex-col gap-4 md:flex-row md:items-center md:justify-between uppercase text-neutral-200 preset-7"
+>
+  <p>&copy; 2026 devhorizon. all rights reserved</p>
+
+  <button
+    class="border border-transparent hover:border-green uppercase flex items-center gap-2 transition-colors duration-450 p-2"
+    id="backToTop"><span>back to top</span> <MoveUp /></button
+  >
+</div>
+
+<script>
+  const backToTopBtn = document.getElementById("backToTop") as HTMLButtonElement | null;
+
+  if (backToTopBtn) {
+    backToTopBtn.addEventListener("click", function () {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    });
+  }
+</script>
