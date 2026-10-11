@@ -22,7 +22,7 @@ const sizes: Record<ButtonSize, string> = {
 };
 
 const baseClassName =
-  "inline-flex items-center justify-center gap-2 border bg-[var(--button-bg)] uppercase text-[var(--button-text)] border-[var(--button-border)] transition-all duration-300 hover:border-[var(--button-hover-border)] hover:bg-[var(--button-hover-bg)] hover:text-[var(--button-hover-text)] active:translate-x-1 active:translate-y-1 active:bg-[var(--button-active-bg)] active:shadow-none disabled:pointer-events-none disabled:opacity-60 active:border-dashed shadow-[2px_2px_0_var(--button-shadow)] hover:shadow-[2px_2px_0_var(--button-hover-shadow)]";
+  "inline-flex gap-2 border bg-[var(--button-bg)] uppercase text-[var(--button-text)] border-[var(--button-border)] transition-all duration-300 hover:border-[var(--button-hover-border)] hover:bg-[var(--button-hover-bg)] hover:text-[var(--button-hover-text)] active:translate-x-1 active:translate-y-1 active:bg-[var(--button-active-bg)] active:shadow-none disabled:pointer-events-none disabled:opacity-60 active:border-dashed shadow-[2px_2px_0_var(--button-shadow)] hover:shadow-[2px_2px_0_var(--button-hover-shadow)]";
 
 export default function Button({
   as,
