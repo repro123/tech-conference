@@ -8,6 +8,9 @@ import { ArrowRight } from "@lucide/astro";
 
 import { Image } from "astro:assets";
 import Elena from "@/assets/images/avatar-elena-vasquez.webp";
+
+import ConferenceData from "@lib/data/data.json";
+const conference = ConferenceData.conference;
 ---
 
 <section>
@@ -16,13 +19,13 @@ import Elena from "@/assets/images/avatar-elena-vasquez.webp";
       <HorizonBGSVG class="absolute inset-0 m-auto" />
       <div>
         <h1 class="preset-1-mobile md:preset-1">
-          where code meets the machine<span class="animate-cursor" aria-hidden="true">_</span>
+          {conference.tagline}
         </h1>
       </div>
 
       <div class="flex items-center justify-between gap-4 border-t preset-6 uppercase pt-4 mt-28">
         <p>Nov 15-17, 2026</p>
-        <p>Pier 70, SF</p>
+        <p>{conference.location.venue}, {conference.location.cityAbbreviation}</p>
       </div>
     </div>
 
