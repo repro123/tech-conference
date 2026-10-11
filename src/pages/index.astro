@@ -1,10 +1,15 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import HomeHero from "@/components/home/HomeHero.astro";
+import TracksSection from "@/components/home/TracksSection.astro";
 ---
 
-<Layout title="Home">
-  <main class="px-4 py-6">
+<Layout
+  title="Home"
+  description="Join us for an exciting tech conference where industry leaders share insights, trends, and innovations in the world of technology."
+>
+  <main class="px-4 py-6 space-y-12">
     <HomeHero />
+    <TracksSection />
   </main>
 </Layout>

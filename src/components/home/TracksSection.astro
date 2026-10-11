@@ -1,0 +1,33 @@
+---
+import Container from "@/layouts/Container.astro";
+import SecondaryHeading from "@/components/ui/SecondaryHeading.astro";
+
+import { tracks } from "@lib/data/tracks.ts";
+import Button from "@components/ui/Button";
+
+const trackLabelColors = {
+  frontend: "text-yellow",
+  accessibility: "text-blue",
+  tooling: "text-purple",
+  performance: "text-red-soft",
+};
+---
+
+<section>
+  <Container>
+    <SecondaryHeading text="tracks" class="text-green preset-6-extrabold" />
+
+    <ul class="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mt-6">
+      {
+        tracks.map((track) => (
+          <li>
+            <Button className="flex-col items-start text-left w-full" variant="neutral" href={track.href}>
+              <p class={`preset-3 lowercase ${trackLabelColors[track.label]}`}>{track.label}</p>
+              <p class="preset-6-medium uppercase max-w-[25ch]">{track.description}</p>
+            </Button>
+          </li>
+        ))
+      }
+    </ul>
+  </Container>
+</section>
