@@ -66,6 +66,19 @@
     --button-active-text: var(--color-neutral-100);
     --button-active-shadow: var(--color-green);
   }
+  [data-variant="neutral"] {
+    --button-bg: transparent;
+    --button-text: var(--color-neutral-200);
+    --button-border: var(--color-neutral-100);
+    --button-shadow: white;
+    --button-hover-bg: transparent;
+    --button-hover-text: var(--color-neutral-100);
+    --button-hover-border: var(--color-green);
+    --button-hover-shadow: var(--color-green);
+    --button-active-bg: var(--color-neutral-900);
+    --button-active-text: var(--color-neutral-100);
+    --button-active-shadow: var(--color-green);
+  }
 }
 
 @utility preset-1 {
