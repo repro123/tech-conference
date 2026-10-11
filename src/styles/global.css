@@ -19,6 +19,18 @@
   --color-cyan: #b5e9fc;
   --color-purple: #ccc4fd;
   --color-blue: #bbd8ff;
+
+  @keyframes sharp-blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+
+  --animate-cursor: sharp-blink 2s ease-in-out infinite;
 }
 
 @layer components {
@@ -40,6 +52,19 @@
     --button-text: var(--color-green);
     --button-border: var(--color-green);
     --button-shadow: var(--color-green);
+  }
+  [data-variant="secondary"] {
+    --button-bg: transparent;
+    --button-text: var(--color-neutral-900);
+    --button-border: var(--color-neutral-900);
+    --button-shadow: var(--color-neutral-600);
+    --button-hover-bg: var(--color-neutral-900);
+    --button-hover-text: var(--color-neutral-100);
+    --button-hover-border: var(--color-neutral-900);
+    --button-hover-shadow: var(--color-neutral-600);
+    --button-active-bg: var(--color-neutral-900);
+    --button-active-text: var(--color-neutral-100);
+    --button-active-shadow: var(--color-green);
   }
 }
 
