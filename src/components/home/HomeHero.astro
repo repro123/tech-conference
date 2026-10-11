@@ -1,0 +1,49 @@
+---
+import Container from "@/layouts/Container.astro";
+import HorizonBGSVG from "@/components/svgs/HorizonBGSVG.astro";
+import SecondaryHeading from "@/components/ui/SecondaryHeading.astro";
+
+import Button from "@/components/ui/Button";
+import { ArrowRight } from "@lucide/astro";
+
+import { Image } from "astro:assets";
+import Elena from "@/assets/images/avatar-elena-vasquez.webp";
+---
+
+<section>
+  <Container class="grid gap-4 lg:grid-cols-[3fr_2fr]">
+    <div class="bg-neutral-100 p-4 relative">
+      <HorizonBGSVG class="absolute inset-0 m-auto" />
+      <div>
+        <h1 class="preset-1-mobile md:preset-1">
+          where code meets the machine<span class="animate-cursor" aria-hidden="true">_</span>
+        </h1>
+      </div>
+
+      <div class="flex items-center justify-between gap-4 border-t preset-6 uppercase pt-4 mt-28">
+        <p>Nov 15-17, 2026</p>
+        <p>Pier 70, SF</p>
+      </div>
+    </div>
+
+    <div class="bg-cyan p-4 relative overflow-hidden">
+      <div class="md:max-w-[30ch] relative z-10">
+        <SecondaryHeading text="featured keynote" class="preset-6" />
+
+        <div class="space-y-2 mt-6">
+          <p class="preset-2">elena vasquez</p>
+          <p class="preset-6-medium uppercase">principal frontend engineer @bytecraft</p>
+        </div>
+
+        <div class="space-y-2 mt-12">
+          <p class="preset-5-bold uppercase">the next frontier of web development</p>
+          <p class="preset-6-medium uppercase">Nov 15 / 9:00 / room A</p>
+        </div>
+
+        <Button href="/schedule" variant="secondary" className="mt-6 w-full">view talk <ArrowRight /> </Button>
+      </div>
+
+      <Image src={Elena} alt="Elena Vasquez" width="320" class="hidden md:block absolute bottom-0 -right-20" priority />
+    </div>
+  </Container>
+</section>
