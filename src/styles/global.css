@@ -19,18 +19,6 @@
   --color-cyan: #b5e9fc;
   --color-purple: #ccc4fd;
   --color-blue: #bbd8ff;
-
-  @keyframes sharp-blink {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0;
-    }
-  }
-
-  --animate-cursor: sharp-blink 2s ease-in-out infinite;
 }
 
 @layer components {

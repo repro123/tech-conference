@@ -1,0 +1,18 @@
+---
+import Container from "@/layouts/Container.astro";
+import SecondaryHeading from "@/components/ui/SecondaryHeading.astro";
+
+import Speakers from "@components/client/Speakers";
+
+import ConferenceData from "@lib/data/data.json";
+const featuredSpeakers = ConferenceData.speakers.filter((speaker) => speaker.featured);
+const talks = ConferenceData.talks;
+---
+
+<section>
+  <Container>
+    <SecondaryHeading text="featured_speakers" class="text-green preset-6-extrabold" />
+
+    <Speakers speakers={featuredSpeakers} talks={talks} client:load />
+  </Container>
+</section>
