@@ -1,5 +1,10 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import Layout from "@/layouts/Layout.astro";
+import HomeHero from "@/components/home/HomeHero.astro";
 ---
 
-<Layout title="Home"> home </Layout>
+<Layout title="Home">
+  <main class="px-4 py-6">
+    <HomeHero />
+  </main>
+</Layout>
