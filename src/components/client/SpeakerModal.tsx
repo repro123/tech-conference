@@ -8,6 +8,9 @@ import type { Track } from "@/lib/types/track";
 import type { Talk } from "@/lib/types/talk";
 import type { Speaker } from "@/lib/types/speaker";
 
+import { useStore } from "@nanostores/react";
+import { $mySchedule, toggleSchedule } from "@/stores/myschedule";
+
 interface SpeakerModalProps {
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -17,25 +20,23 @@ interface SpeakerModalProps {
 }
 
 export default function SpeakerModal({ open, setOpen, speaker, talk, track }: SpeakerModalProps) {
+  const schedule = useStore($mySchedule);
+  const isScheduled = talk ? schedule.includes(talk.id) : false;
+
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Portal>
         <Dialog.Backdrop className="fixed inset-0 min-h-dvh bg-neutral-900 opacity-70 transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0 supports-[-webkit-touch-callout:none]:absolute" />
         <Dialog.Popup className="fixed top-1/2 left-1/2 flex w-full lg:w-240 max-h-[calc(100dvh-3rem)] overflow-y-auto overscroll-contain max-w-[calc(100vw-3rem)] -translate-x-1/2 -translate-y-1/2 flex-col gap-4 bg-neutral-900 p-6 text-neutral-200 border border-neutral-600 shadow-[0.25rem_0.25rem_0] shadow-black/12  transition-[scale,opacity] duration-100 ease-out data-ending-style:scale-[0.98] data-ending-style:opacity-0 data-starting-style:scale-[0.98] data-starting-style:opacity-0">
           <div className="relative border-b border-b-neutral-600 pb-4">
-            <Dialog.Close className="flex h-8 items-center justify-center border border-neutral-100 bg-transparent px-3 select-none hover:not-data-disabled:bg-neutral-900 active:not-data-disabled:bg-neutral-600 data-disabled:border-neutral-500 data-disabled:text-neutral-500 disabled:border-neutral-500 disabled:text-neutral-500 focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-neutral-white absolute top-0 right-0">
+            <Dialog.Close className="flex h-8 items-center justify-center border border-neutral-100 bg-transparent px-3 select-none hover:not-data-disabled:bg-neutral-900 active:not-data-disabled:bg-neutral-600 data-disabled:border-neutral-500 data-disabled:text-neutral-500 disabled:border-neutral-500 disabled:text-neutral-500 focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-neutral-100 absolute top-0 right-0">
               <img src={Close.src} alt="" /> <span className="sr-only">Close</span>
             </Dialog.Close>
 
             <figure className="flex flex-col gap-4 md:flex-row md:items-center">
               <div className="relative overflow-hidden size-48" style={{ backgroundColor: track?.color }}>
                 <img src={AvatarBG.src} alt="" className="absolute inset-0 size-full object-cover" />
-                <img
-                  alt={speaker?.name}
-                  src={speaker?.avatar}
-                  className="relative size-full object-cover max-w-full"
-                  loading="lazy"
-                />
+                <img alt={speaker?.name} src={speaker?.avatar} className="relative size-full object-cover max-w-full" />
               </div>
               <figcaption className="flex flex-col gap-1">
                 <h2 className="preset-3 text-neutral-100 lowercase">{speaker?.name}</h2>
@@ -44,8 +45,6 @@ export default function SpeakerModal({ open, setOpen, speaker, talk, track }: Sp
                 </p>
               </figcaption>
             </figure>
-
-            <div></div>
           </div>
 
           <div className="py-4 border-b border-b-neutral-600">
@@ -93,10 +92,13 @@ export default function SpeakerModal({ open, setOpen, speaker, talk, track }: Sp
                   </div>
 
                   <button
+                    aria-label="Add to my schedule"
+                    aria-pressed={isScheduled}
+                    onClick={() => talk && toggleSchedule(talk.id)}
                     className="bg-neutral-900 grid place-items-center rounded-full p-2 text-(--track) hover:text-green hover:scale-110 transition-all duration-450"
                     style={{ "--track": track?.color } as React.CSSProperties}
                   >
-                    <Star />
+                    <Star fill={isScheduled ? "currentColor" : "none"} />
                   </button>
                 </div>
               </div>
