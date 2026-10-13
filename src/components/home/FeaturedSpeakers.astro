@@ -8,13 +8,14 @@ import Speakers from "@components/client/Speakers";
 import ConferenceData from "@lib/data/data.json";
 const featuredSpeakers = ConferenceData.speakers.filter((speaker) => speaker.featured);
 const talks = ConferenceData.talks;
+const tracks = ConferenceData.tracks;
 ---
 
 <section>
   <Container>
     <SecondaryHeading text="featured_speakers" class="text-green preset-6-extrabold" />
 
-    <Speakers speakers={featuredSpeakers} talks={talks} client:load />
+    <Speakers speakers={featuredSpeakers} talks={talks} tracks={tracks} client:load />
 
     <div class="mt-6 flex justify-center">
       <Button href="/speakers" variant="primary" className="preset-5-bold w-fit">View all speakers</Button>
