@@ -19,10 +19,6 @@ function Speakers({ speakers, talks, tracks }: SpeakersProps) {
   const selectedTalk = talks.find((t) => t.speakerId === selectedSpeaker?.id);
   const selectedTrack = tracks.find((t) => t.id === selectedTalk?.trackId);
 
-  console.log(selectedSpeaker);
-  console.log(selectedTalk);
-  console.log(selectedTrack);
-
   function openSpeakerModal(speaker: Speaker) {
     setSelectedSpeaker(speaker);
     setOpen(true);
