@@ -3,7 +3,7 @@ import Container from "@/layouts/Container.astro";
 import SecondaryHeading from "@/components/ui/SecondaryHeading.astro";
 import Button from "@/components/ui/Button";
 
-import Speakers from "@components/client/Speakers";
+import SpeakersCards from "@components/speakers-page/SpeakersCards.astro";
 
 import ConferenceData from "@lib/data/data.json";
 const featuredSpeakers = ConferenceData.speakers.filter((speaker) => speaker.featured);
@@ -15,7 +15,7 @@ const tracks = ConferenceData.tracks;
   <Container>
     <SecondaryHeading text="featured_speakers" class="text-green preset-6-extrabold" />
 
-    <Speakers speakers={featuredSpeakers} talks={talks} tracks={tracks} client:load />
+    <SpeakersCards speakers={featuredSpeakers} talks={talks} tracks={tracks} />
 
     <div class="mt-6 flex justify-center">
       <Button href="/speakers" variant="primary" className="preset-5-bold w-fit">View all speakers</Button>

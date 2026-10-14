@@ -27,14 +27,14 @@ export default function SpeakerModal({ open, setOpen, speaker, talk, track }: Sp
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Portal>
         <Dialog.Backdrop className="fixed inset-0 min-h-dvh bg-neutral-900 opacity-70 transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0 supports-[-webkit-touch-callout:none]:absolute" />
-        <Dialog.Popup className="fixed top-1/2 left-1/2 flex w-full lg:w-240 max-h-[calc(100dvh-3rem)] overflow-y-auto overscroll-contain max-w-[calc(100vw-3rem)] -translate-x-1/2 -translate-y-1/2 flex-col gap-4 bg-neutral-900 p-6 text-neutral-200 border border-neutral-600 shadow-[0.25rem_0.25rem_0] shadow-black/12  transition-[scale,opacity] duration-100 ease-out data-ending-style:scale-[0.98] data-ending-style:opacity-0 data-starting-style:scale-[0.98] data-starting-style:opacity-0">
+        <Dialog.Popup className="fixed top-1/2 left-1/2 flex w-full lg:w-180 max-h-[calc(100dvh-3rem)] overflow-y-auto overscroll-contain max-w-[calc(100vw-3rem)] -translate-x-1/2 -translate-y-1/2 flex-col gap-4 bg-neutral-900 p-6 text-neutral-200 border border-neutral-600 shadow-[0.25rem_0.25rem_0] shadow-black/12  transition-[scale,opacity] duration-100 ease-out data-ending-style:scale-[0.98] data-ending-style:opacity-0 data-starting-style:scale-[0.98] data-starting-style:opacity-0">
           <div className="relative border-b border-b-neutral-600 pb-4">
             <Dialog.Close className="flex h-8 items-center justify-center border border-neutral-100 bg-transparent px-3 select-none hover:not-data-disabled:bg-neutral-900 active:not-data-disabled:bg-neutral-600 data-disabled:border-neutral-500 data-disabled:text-neutral-500 disabled:border-neutral-500 disabled:text-neutral-500 focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-neutral-100 absolute top-0 right-0">
               <img src={Close.src} alt="" /> <span className="sr-only">Close</span>
             </Dialog.Close>
 
             <figure className="flex flex-col gap-4 md:flex-row md:items-center">
-              <div className="relative overflow-hidden size-48" style={{ backgroundColor: track?.color }}>
+              <div className="relative overflow-hidden size-36" style={{ backgroundColor: track?.color }}>
                 <img src={AvatarBG.src} alt="" className="absolute inset-0 size-full object-cover" />
                 <img alt={speaker?.name} src={speaker?.avatar} className="relative size-full object-cover max-w-full" />
               </div>
@@ -47,11 +47,11 @@ export default function SpeakerModal({ open, setOpen, speaker, talk, track }: Sp
             </figure>
           </div>
 
-          <div className="py-4 border-b border-b-neutral-600">
+          <div className="pb-4 border-b border-b-neutral-600">
             <p className="preset-6">{speaker?.bio}</p>
           </div>
 
-          <div className="pt-4">
+          <div>
             <h3 className="flex flex-row uppercase gap-2 text-green preset-6">
               <span>//</span>
               <span>talk</span>

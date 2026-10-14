@@ -2,7 +2,7 @@
 import Container from "@/layouts/Container.astro";
 import SecondaryHeading from "@/components/ui/SecondaryHeading.astro";
 
-import Speakers from "@components/client/Speakers";
+import SpeakersCards from "@components/speakers-page/SpeakersCards.astro";
 
 import ConferenceData from "@lib/data/data.json";
 const speakers = ConferenceData.speakers;
@@ -14,6 +14,6 @@ const tracks = ConferenceData.tracks;
   <Container>
     <SecondaryHeading text="speakers" class="text-green preset-6-extrabold" />
 
-    <Speakers speakers={speakers} talks={talks} tracks={tracks} client:load />
+    <SpeakersCards speakers={speakers} talks={talks} tracks={tracks} />
   </Container>
 </section>
