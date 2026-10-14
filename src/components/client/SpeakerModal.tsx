@@ -64,7 +64,7 @@ export default function SpeakerModal({ open, setOpen, speaker, talk, track }: Sp
                 </span>
               </div>
               <div
-                className="text-neutral-900 flex flex-col md:flex-row w-full"
+                className="text-neutral-900 flex flex-col md:flex-row md:items-center w-full"
                 style={{ backgroundColor: track?.color }}
               >
                 <div className="p-4 w-full">
