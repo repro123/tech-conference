@@ -1,6 +1,6 @@
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes, CSSProperties, ReactNode } from "react";
 
-type ButtonVariant = "primary" | "secondary" | "accent" | "neutral" | "nav";
+type ButtonVariant = "primary" | "secondary" | "accent" | "neutral" | "nav" | "schedule" | "clear";
 type ButtonSize = "sm" | "md" | "lg";
 type ButtonElement = "button" | "a";
 
