@@ -1,0 +1,123 @@
+---
+import type { Talk } from "@lib/types/talk";
+import type { Track } from "@lib/types/track";
+import type { Speaker } from "@lib/types/speaker";
+
+import Barcode from "@assets/images/pattern-barcode.svg";
+import { Plus, Minus } from "@lucide/astro";
+
+interface Props {
+  talks: Talk[];
+  tracks: Track[];
+  speakers: Speaker[];
+}
+
+const { talks, tracks, speakers } = Astro.props;
+---
+
+<ul class="mt-6 grid gap-4">
+  {
+    talks.map((talk) => {
+      const track = tracks.find((track) => track.id === talk.trackId);
+      const speaker = speakers.find((speaker) => speaker.id === talk.speakerId);
+      return (
+        <li>
+          <div class="border mt-4 flex flex-col md:flex-row" style={{ borderColor: track?.color }}>
+            <div class="text-center flex items-center justify-center p-1 md:w-8">
+              <span class="uppercase preset-6-medium md:-rotate-90" style={{ color: track?.color }}>
+                {track?.name}
+              </span>
+            </div>
+
+            <div
+              class="text-neutral-900 flex flex-col md:flex-row md:items-center w-full"
+              style={{ backgroundColor: track?.color }}
+            >
+              <div class="p-4 w-full">
+                <p class="preset-2-mobile md:preset-2 lowercase">{talk?.title}</p>
+
+                <div class="flex items-center gap-2 preset-5 uppercase mt-4">
+                  <p class="preset-5-bold">{speaker?.name}</p>
+                  <span>//</span>
+                  <p>{speaker?.company}</p>
+                </div>
+
+                <div class="grid gap-2 text-neutral-900 mt-4">
+                  <div
+                    class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-450 data-open:grid-rows-[1fr]"
+                    id={`details-${talk.id}`}
+                    data-details
+                  >
+                    <div class="overflow-hidden">
+                      <div class="grid gap-2 border-t border-t-neutral-500 pt-4 mt-4">
+                        <p class="preset-6">{talk?.description}</p>
+                        <p class="preset-6-medium uppercase">location: {talk?.location}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    class="preset-7 text-neutral-600 hover:text-neutral-900 hover:underline flex items-center gap-1 w-fit uppercase"
+                    type="button"
+                    data-toggle-details
+                    aria-expanded="false"
+                    aria-controls={`details-${talk.id}`}
+                  >
+                    <Plus class="size-4" data-icon-plus />
+                    <Minus class="hidden size-4" data-icon-minus /> <span data-label>show details</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="border-t md:border-t-0 md:border-l border-dashed border-neutral-900 p-4 flex md:flex-col items-center justify-between md:justify-center gap-4 h-full">
+                <div class="flex flex-col items-center">
+                  <span aria-label="start time" class="preset-4">
+                    {talk?.startTime}
+                  </span>
+                  <span aria-label="end time" class="preset-7">
+                    {talk?.endTime}
+                  </span>
+                </div>
+
+                <div>
+                  <img src={Barcode.src} alt="" />
+                </div>
+
+                <div>
+                  <p class="uppercase preset-7">day {talk?.day}</p>
+                </div>
+
+                {/* <button
+                  aria-label="Add to my schedule"
+                  aria-pressed={isScheduled}
+                  onClick={() => talk && toggleSchedule(talk.id)}
+                  class="bg-neutral-900 grid place-items-center rounded-full p-2 text-(--track) hover:text-green hover:scale-110 transition-all duration-450"
+                  style={{ "--track": track?.color } as React.CSSProperties}
+                >
+                  <Star fill={isScheduled ? "currentColor" : "none"} />
+                </button> */}
+              </div>
+            </div>
+          </div>
+        </li>
+      );
+    })
+  }
+</ul>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>("[data-toggle-details]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const panel = document.getElementById(btn.getAttribute("aria-controls")!);
+      if (!panel) return;
+
+      const expanded = btn.getAttribute("aria-expanded") === "true";
+      btn.setAttribute("aria-expanded", String(!expanded));
+      panel.toggleAttribute("data-open", !expanded);
+
+      btn.querySelector("[data-icon-plus]")?.classList.toggle("hidden", !expanded);
+      btn.querySelector("[data-icon-minus]")?.classList.toggle("hidden", expanded);
+      btn.querySelector("[data-label]")!.textContent = expanded ? "show details" : "hide details";
+    });
+  });
+</script>
