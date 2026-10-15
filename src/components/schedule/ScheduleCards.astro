@@ -106,18 +106,20 @@ const { talks, tracks, speakers } = Astro.props;
 </ul>
 
 <script>
-  document.querySelectorAll<HTMLButtonElement>("[data-toggle-details]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const panel = document.getElementById(btn.getAttribute("aria-controls")!);
-      if (!panel) return;
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll<HTMLButtonElement>("[data-toggle-details]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const panel = document.getElementById(btn.getAttribute("aria-controls")!);
+        if (!panel) return;
 
-      const expanded = btn.getAttribute("aria-expanded") === "true";
-      btn.setAttribute("aria-expanded", String(!expanded));
-      panel.toggleAttribute("data-open", !expanded);
+        const expanded = btn.getAttribute("aria-expanded") === "true";
+        btn.setAttribute("aria-expanded", String(!expanded));
+        panel.toggleAttribute("data-open", !expanded);
 
-      btn.querySelector("[data-icon-plus]")?.classList.toggle("hidden", !expanded);
-      btn.querySelector("[data-icon-minus]")?.classList.toggle("hidden", expanded);
-      btn.querySelector("[data-label]")!.textContent = expanded ? "show details" : "hide details";
+        btn.querySelector("[data-icon-plus]")?.classList.toggle("hidden", !expanded);
+        btn.querySelector("[data-icon-minus]")?.classList.toggle("hidden", expanded);
+        btn.querySelector("[data-label]")!.textContent = expanded ? "show details" : "hide details";
+      });
     });
   });
 </script>

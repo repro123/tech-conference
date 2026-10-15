@@ -14,14 +14,16 @@ import { MoveUp } from "@lucide/astro";
 </div>
 
 <script>
-  const backToTopBtn = document.getElementById("backToTop") as HTMLButtonElement | null;
+  document.addEventListener("astro:page-load", () => {
+    const backToTopBtn = document.getElementById("backToTop") as HTMLButtonElement | null;
 
-  if (backToTopBtn) {
-    backToTopBtn.addEventListener("click", function () {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
+    if (backToTopBtn) {
+      backToTopBtn.addEventListener("click", function () {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
       });
-    });
-  }
+    }
+  });
 </script>
