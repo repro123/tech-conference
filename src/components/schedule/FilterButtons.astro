@@ -1,0 +1,71 @@
+---
+import Container from "@layouts/Container.astro";
+import Button from "@components/ui/Button";
+
+import ConferenceData from "@lib/data/data.json";
+const speakers = ConferenceData.speakers;
+const talks = ConferenceData.talks;
+const tracks = ConferenceData.tracks;
+
+import type { Speaker } from "@/lib/types/speaker";
+import type { Track } from "@/lib/types/track";
+import type { Talk } from "@/lib/types/talk";
+
+const days = [...new Set(talks.map((talk) => talk.day))].sort((a, b) => a - b);
+const trackLabels = [...new Set(tracks.map((track) => track.name))];
+---
+
+<section>
+  <Container>
+    <div class="flex items-center gap-4 flex-wrap" id="schedule-filters" role="group" aria-label="Filter talks">
+      {
+        days.map((day) => (
+          <Button
+            variant="accent"
+            size="sm"
+            data-filter-day
+            type="button"
+            className="preset-6-medium"
+            value={day}
+            aria-pressed="false"
+          >
+            day {day}
+          </Button>
+        ))
+      }
+      <span aria-hidden="true" class="self-stretch border-l border-neutral-100"></span>
+      {
+        trackLabels.map((track) => {
+          const label = track.toLowerCase() === "accessibility" ? "a11y" : track;
+          return (
+            <Button
+              variant="accent"
+              size="sm"
+              data-filter-track
+              type="button"
+              className="preset-6-medium rounded-full"
+              value={label}
+              aria-pressed="false"
+            >
+              {label}
+            </Button>
+          );
+        })
+      }
+      <Button
+        variant="schedule"
+        size="sm"
+        data-filter-saved
+        type="button"
+        className="preset-6-medium rounded-full border-dashed"
+        value="saved"
+        aria-pressed="false"
+      >
+        my schedule
+      </Button>
+      <Button variant="clear" size="sm" id="clear" type="button" className="preset-6-medium rounded-full">
+        clear
+      </Button>
+    </div>
+  </Container>
+</section>
