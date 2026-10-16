@@ -2,6 +2,7 @@
 import type { Talk } from "@lib/types/talk";
 import type { Track } from "@lib/types/track";
 import type { Speaker } from "@lib/types/speaker";
+import slugify from "slugify";
 
 import Barcode from "@assets/images/pattern-barcode.svg";
 import { Plus, Minus } from "@lucide/astro";
@@ -23,9 +24,16 @@ const { talks, tracks, speakers, isSchedulePage = false } = Astro.props;
       const track = tracks.find((track) => track.id === talk.trackId);
       const speaker = speakers.find((speaker) => speaker.id === talk.speakerId);
       const trackLabel = track?.name.toLowerCase() === "accessibility" ? "a11y" : track?.name;
+      const talkSlug = slugify(talk.title, { lower: true, strict: true });
 
       return (
-        <li data-talk-card data-day={talk.day} data-track={trackLabel?.toLowerCase()} data-talk-id={talk.id}>
+        <li
+          data-talk-card
+          data-talk-slug={talkSlug}
+          data-day={talk.day}
+          data-track={trackLabel?.toLowerCase()}
+          data-talk-id={talk.id}
+        >
           <div class="border mt-4 flex flex-col md:flex-row" style={{ borderColor: track?.color }}>
             <div class="text-center flex items-center justify-center p-1 md:w-8">
               <span class="uppercase preset-6-medium md:-rotate-90" style={{ color: track?.color }}>
@@ -102,20 +110,46 @@ const { talks, tracks, speakers, isSchedulePage = false } = Astro.props;
 </ul>
 
 <script>
-  document.addEventListener("astro:page-load", () => {
-    document.querySelectorAll<HTMLButtonElement>("[data-toggle-details]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const panel = document.getElementById(btn.getAttribute("aria-controls")!);
-        if (!panel) return;
+  function syncTalkDetails() {
+    const openSlug = new URLSearchParams(window.location.search).get("talk");
 
-        const expanded = btn.getAttribute("aria-expanded") === "true";
-        btn.setAttribute("aria-expanded", String(!expanded));
-        panel.toggleAttribute("data-open", !expanded);
+    document.querySelectorAll<HTMLButtonElement>("[data-toggle-details]").forEach((button) => {
+      const card = button.closest<HTMLElement>("[data-talk-card]");
+      const isOpen = card?.dataset.talkSlug === openSlug;
+      const panelId = button.getAttribute("aria-controls");
+      const panel = panelId ? document.getElementById(panelId) : null;
 
-        btn.querySelector("[data-icon-plus]")?.classList.toggle("hidden", !expanded);
-        btn.querySelector("[data-icon-minus]")?.classList.toggle("hidden", expanded);
-        btn.querySelector("[data-label]")!.textContent = expanded ? "show details" : "hide details";
-      });
+      button.setAttribute("aria-expanded", String(isOpen));
+      panel?.toggleAttribute("data-open", isOpen);
+      button.querySelector("[data-icon-plus]")?.classList.toggle("hidden", isOpen);
+      button.querySelector("[data-icon-minus]")?.classList.toggle("hidden", !isOpen);
+
+      const label = button.querySelector("[data-label]");
+      if (label) label.textContent = isOpen ? "hide details" : "show details";
     });
+  }
+
+  document.addEventListener("click", (event) => {
+    if (!(event.target instanceof Element)) return;
+
+    const button = event.target.closest<HTMLButtonElement>("[data-toggle-details]");
+    if (!button) return;
+
+    const slug = button.closest<HTMLElement>("[data-talk-card]")?.dataset.talkSlug;
+    if (!slug) return;
+
+    const url = new URL(window.location.href);
+    if (url.searchParams.get("talk") === slug) {
+      url.searchParams.delete("talk");
+    } else {
+      url.searchParams.set("talk", slug);
+    }
+
+    history.pushState({}, "", url);
+    syncTalkDetails();
   });
+
+  window.addEventListener("popstate", syncTalkDetails);
+  document.addEventListener("astro:page-load", syncTalkDetails);
+  syncTalkDetails();
 </script>
