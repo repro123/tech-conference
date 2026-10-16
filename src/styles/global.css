@@ -119,6 +119,21 @@
     --button-active-text: var(--color-neutral-900);
     --button-active-shadow: transparent;
   }
+  /* Selected day and track filters */
+  [data-variant="accent"][aria-pressed="true"] {
+    --button-bg: var(--color-green);
+    --button-text: var(--color-neutral-900);
+    --button-border: var(--color-green);
+    --button-shadow: transparent;
+  }
+
+  /* Selected My Schedule button */
+  [data-variant="schedule"][aria-pressed="true"] {
+    --button-bg: var(--color-green);
+    --button-text: var(--color-neutral-900);
+    --button-border: var(--color-green);
+    --button-shadow: transparent;
+  }
 }
 
 @utility preset-1 {
