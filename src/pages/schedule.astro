@@ -2,6 +2,7 @@
 import Layout from "@/layouts/Layout.astro";
 import FilterButtons from "@/components/schedule/FilterButtons.astro";
 import ScheduleCards from "@/components/schedule/ScheduleCards.astro";
+import Container from "@/layouts/Container.astro";
 
 import ConferenceData from "@lib/data/data.json";
 const speakers = ConferenceData.speakers;
@@ -16,9 +17,18 @@ const tracks = ConferenceData.tracks;
   <main class="px-4 py-6 space-y-12">
     <FilterButtons />
 
-    <div id="schedule-page-cards">
-      <ScheduleCards talks={talks} tracks={tracks} speakers={speakers} />
-    </div>
+    <Container id="schedule-page-cards">
+      <ScheduleCards talks={talks} tracks={tracks} speakers={speakers} isSchedulePage={true} />
+      <p
+        id="schedule-empty-state"
+        class="mt-6 border border-dashed border-neutral-500 text-neutral-100 p-6 text-center preset-5 uppercase"
+        role="status"
+        aria-live="polite"
+        hidden
+      >
+        No talks match these filters. Try changing or clearing your filters.
+      </p>
+    </Container>
   </main>
 </Layout>
 
@@ -34,7 +44,10 @@ const tracks = ConferenceData.tracks;
 
     const savedIds = $mySchedule.get();
 
-    document.querySelectorAll<HTMLElement>("#schedule-page-cards [data-talk-card]").forEach((card) => {
+    const cards = document.querySelectorAll<HTMLElement>("#schedule-page-cards [data-talk-card]");
+    let visibleCount = 0;
+
+    cards.forEach((card) => {
       const matchesDay = card.dataset.day === day;
 
       const matchesTrack = !track || card.dataset.track === track;
@@ -42,7 +55,11 @@ const tracks = ConferenceData.tracks;
       const matchesSaved = !savedOnly || savedIds.includes(card.dataset.talkId ?? "");
 
       card.hidden = !(matchesDay && matchesTrack && matchesSaved);
+      if (!card.hidden) visibleCount += 1;
     });
+
+    const emptyState = document.querySelector<HTMLElement>("#schedule-empty-state");
+    if (emptyState) emptyState.hidden = visibleCount > 0;
   }
 
   document.addEventListener("astro:page-load", filterScheduleCards);
