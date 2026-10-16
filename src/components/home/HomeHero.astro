@@ -2,6 +2,7 @@
 import Container from "@/layouts/Container.astro";
 import HorizonBGSVG from "@/components/svgs/HorizonBGSVG.astro";
 import SecondaryHeading from "@/components/ui/SecondaryHeading.astro";
+import slugify from "slugify";
 
 import Button from "@/components/ui/Button";
 import { ArrowRight } from "@lucide/astro";
@@ -11,6 +12,7 @@ import Elena from "@/assets/images/avatar-elena-vasquez.webp";
 
 import ConferenceData from "@lib/data/data.json";
 const conference = ConferenceData.conference;
+const keynote = ConferenceData.talks[0];
 ---
 
 <section>
@@ -39,11 +41,14 @@ const conference = ConferenceData.conference;
         </div>
 
         <div class="space-y-2 mt-12">
-          <p class="preset-5-bold uppercase">the next frontier of web development</p>
-          <p class="preset-6-medium uppercase">Nov 15 / 9:00 / room A</p>
+          <p class="preset-5-bold uppercase">{keynote.title}</p>
+          <p class="preset-6-medium uppercase">Nov 15 / {keynote.startTime} / {keynote.location}</p>
         </div>
 
-        <Button href="/schedule" variant="secondary" className="mt-6 w-full items-center justify-center"
+        <Button
+          href={`/schedule?talk=${slugify(keynote.title, { lower: true, strict: true })}`}
+          variant="secondary"
+          className="mt-6 w-full items-center justify-center"
           >view talk <ArrowRight />
         </Button>
       </div>
