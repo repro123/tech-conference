@@ -1,15 +1,13 @@
 import { Dialog } from "@base-ui/react/dialog";
 import Close from "@assets/images/icon-cross.svg";
 import Barcode from "@assets/images/pattern-barcode.svg";
-import { Star } from "lucide-react";
 import AvatarBG from "@assets/images/pattern-avatar-bg.svg";
 
 import type { Track } from "@/lib/types/track";
 import type { Talk } from "@/lib/types/talk";
 import type { Speaker } from "@/lib/types/speaker";
 
-import { useStore } from "@nanostores/react";
-import { $mySchedule, toggleSchedule } from "@/stores/myschedule";
+import AddToMySchedule from "@/components/client/AddToMySchedule";
 
 interface SpeakerModalProps {
   open: boolean;
@@ -20,9 +18,6 @@ interface SpeakerModalProps {
 }
 
 export default function SpeakerModal({ open, setOpen, speaker, talk, track }: SpeakerModalProps) {
-  const schedule = useStore($mySchedule);
-  const isScheduled = talk ? schedule.includes(talk.id) : false;
-
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Portal>
@@ -91,15 +86,7 @@ export default function SpeakerModal({ open, setOpen, speaker, talk, track }: Sp
                     <img src={Barcode.src} alt="" />
                   </div>
 
-                  <button
-                    aria-label="Add to my schedule"
-                    aria-pressed={isScheduled}
-                    onClick={() => talk && toggleSchedule(talk.id)}
-                    className="bg-neutral-900 grid place-items-center rounded-full p-2 text-(--track) hover:text-green hover:scale-110 transition-all duration-450"
-                    style={{ "--track": track?.color } as React.CSSProperties}
-                  >
-                    <Star fill={isScheduled ? "currentColor" : "none"} />
-                  </button>
+                  {track && talk && <AddToMySchedule talkId={talk.id} trackColor={track?.color} />}
                 </div>
               </div>
             </div>

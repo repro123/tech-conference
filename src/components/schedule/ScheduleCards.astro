@@ -5,14 +5,16 @@ import type { Speaker } from "@lib/types/speaker";
 
 import Barcode from "@assets/images/pattern-barcode.svg";
 import { Plus, Minus } from "@lucide/astro";
+import AddToMySchedule from "@components/client/AddToMySchedule";
 
 interface Props {
   talks: Talk[];
   tracks: Track[];
   speakers: Speaker[];
+  isSchedulePage?: boolean;
 }
 
-const { talks, tracks, speakers } = Astro.props;
+const { talks, tracks, speakers, isSchedulePage = false } = Astro.props;
 ---
 
 <ul class="mt-6 grid gap-4">
@@ -21,6 +23,7 @@ const { talks, tracks, speakers } = Astro.props;
       const track = tracks.find((track) => track.id === talk.trackId);
       const speaker = speakers.find((speaker) => speaker.id === talk.speakerId);
       const trackLabel = track?.name.toLowerCase() === "accessibility" ? "a11y" : track?.name;
+
       return (
         <li data-talk-card data-day={talk.day} data-track={trackLabel?.toLowerCase()} data-talk-id={talk.id}>
           <div class="border mt-4 flex flex-col md:flex-row" style={{ borderColor: track?.color }}>
@@ -88,15 +91,7 @@ const { talks, tracks, speakers } = Astro.props;
                   <p class="uppercase preset-7">day {talk?.day}</p>
                 </div>
 
-                {/* <button
-                  aria-label="Add to my schedule"
-                  aria-pressed={isScheduled}
-                  onClick={() => talk && toggleSchedule(talk.id)}
-                  class="bg-neutral-900 grid place-items-center rounded-full p-2 text-(--track) hover:text-green hover:scale-110 transition-all duration-450"
-                  style={{ "--track": track?.color } as React.CSSProperties}
-                >
-                  <Star fill={isScheduled ? "currentColor" : "none"} />
-                </button> */}
+                {isSchedulePage && track && <AddToMySchedule talkId={talk.id} trackColor={track.color} client:load />}
               </div>
             </div>
           </div>
