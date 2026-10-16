@@ -3,13 +3,8 @@ import Container from "@layouts/Container.astro";
 import Button from "@components/ui/Button";
 
 import ConferenceData from "@lib/data/data.json";
-const speakers = ConferenceData.speakers;
 const talks = ConferenceData.talks;
 const tracks = ConferenceData.tracks;
-
-import type { Speaker } from "@/lib/types/speaker";
-import type { Track } from "@/lib/types/track";
-import type { Talk } from "@/lib/types/talk";
 
 const days = [...new Set(talks.map((talk) => talk.day))].sort((a, b) => a - b);
 const trackLabels = [...new Set(tracks.map((track) => track.name))];
@@ -44,7 +39,7 @@ const trackLabels = [...new Set(tracks.map((track) => track.name))];
               data-filter-track
               type="button"
               className="preset-6-medium rounded-full"
-              value={label}
+              value={label.toLowerCase()}
               aria-pressed="false"
             >
               {label}
@@ -69,3 +64,90 @@ const trackLabels = [...new Set(tracks.map((track) => track.name))];
     </div>
   </Container>
 </section>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const params = new URLSearchParams(window.location.search);
+
+    const dayFilterBtns = document.querySelectorAll("[data-filter-day]") as NodeListOf<HTMLButtonElement>;
+    const trackFilterBtns = document.querySelectorAll("[data-filter-track]") as NodeListOf<HTMLButtonElement>;
+    const savedBtn = document.querySelector<HTMLButtonElement>("[data-filter-saved]");
+    const clearBtn = document.getElementById("clear") as HTMLButtonElement | null;
+
+    if (dayFilterBtns) {
+      dayFilterBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const url = new URL(window.location.href);
+          url.searchParams.set("day", btn.value);
+          updateUrl(url);
+        });
+      });
+    }
+
+    if (trackFilterBtns) {
+      trackFilterBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const url = new URL(window.location.href);
+          const currentTrack = url.searchParams.get("track");
+
+          if (currentTrack === btn.value) {
+            url.searchParams.delete("track");
+          } else {
+            url.searchParams.set("track", btn.value);
+          }
+
+          updateUrl(url);
+        });
+      });
+    }
+
+    savedBtn?.addEventListener("click", () => {
+      const url = new URL(window.location.href);
+      const isSaved = url.searchParams.get("saved") === "true";
+
+      if (isSaved) {
+        url.searchParams.delete("saved");
+      } else {
+        url.searchParams.set("saved", "true");
+      }
+
+      updateUrl(url);
+    });
+
+    if (clearBtn) {
+      clearBtn.addEventListener("click", () => {
+        const url = new URL(window.location.href);
+        url.search = "";
+        updateUrl(url);
+      });
+    }
+
+    syncFilters();
+
+    function updateUrl(url: URL) {
+      history.pushState({}, "", url);
+
+      syncFilters();
+
+      window.dispatchEvent(new CustomEvent("schedule-filters-change"));
+    }
+
+    function syncFilters() {
+      const params = new URLSearchParams(window.location.search);
+
+      const day = params.get("day") ?? "1";
+      const track = params.get("track");
+      const saved = params.get("saved") === "true";
+
+      dayFilterBtns.forEach((btn) => {
+        btn.setAttribute("aria-pressed", String(btn.value === day));
+      });
+
+      trackFilterBtns.forEach((btn) => {
+        btn.setAttribute("aria-pressed", String(btn.value === track));
+      });
+
+      savedBtn?.setAttribute("aria-pressed", String(saved));
+    }
+  });
+</script>
