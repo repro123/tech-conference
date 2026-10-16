@@ -20,8 +20,9 @@ const { talks, tracks, speakers } = Astro.props;
     talks.map((talk) => {
       const track = tracks.find((track) => track.id === talk.trackId);
       const speaker = speakers.find((speaker) => speaker.id === talk.speakerId);
+      const trackLabel = track?.name.toLowerCase() === "accessibility" ? "a11y" : track?.name;
       return (
-        <li>
+        <li data-talk-card data-day={talk.day} data-track={trackLabel?.toLowerCase()} data-talk-id={talk.id}>
           <div class="border mt-4 flex flex-col md:flex-row" style={{ borderColor: track?.color }}>
             <div class="text-center flex items-center justify-center p-1 md:w-8">
               <span class="uppercase preset-6-medium md:-rotate-90" style={{ color: track?.color }}>
