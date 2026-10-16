@@ -21,7 +21,11 @@ const trackLabelColors = {
       {
         tracks.map((track) => (
           <li>
-            <Button className="flex-col items-start text-left w-full" variant="neutral" href={track.href}>
+            <Button
+              className="flex-col items-start text-left w-full"
+              variant="neutral"
+              href={`/schedule?track=${track.href}`}
+            >
               <p class={`preset-3 lowercase ${trackLabelColors[track.label]}`}>{track.label}</p>
               <p class="preset-6-medium uppercase max-w-[25ch]">{track.description}</p>
             </Button>

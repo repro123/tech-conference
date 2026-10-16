@@ -10,7 +10,7 @@ import { tracks } from "@/lib/data/tracks";
     {
       tracks.map((track) => (
         <li>
-          <a href={track.href} class="capitalize hover:text-green">
+          <a href={`/schedule?track=${track.href}`} class="capitalize hover:text-green">
             {track.label}
           </a>
         </li>
