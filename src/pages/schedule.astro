@@ -1,6 +1,12 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import FilterButtons from "@/components/schedule/FilterButtons.astro";
+import ScheduleCards from "@/components/schedule/ScheduleCards.astro";
+
+import ConferenceData from "@lib/data/data.json";
+const speakers = ConferenceData.speakers;
+const talks = ConferenceData.talks;
+const tracks = ConferenceData.tracks;
 ---
 
 <Layout
@@ -9,6 +15,39 @@ import FilterButtons from "@/components/schedule/FilterButtons.astro";
 >
   <main class="px-4 py-6 space-y-12">
     <FilterButtons />
-    schedule
+
+    <div id="schedule-page-cards">
+      <ScheduleCards talks={talks} tracks={tracks} speakers={speakers} />
+    </div>
   </main>
 </Layout>
+
+<script>
+  import { $mySchedule } from "@/stores/myschedule";
+
+  function filterScheduleCards() {
+    const params = new URLSearchParams(window.location.search);
+
+    const day = params.get("day") ?? "1";
+    const track = params.get("track");
+    const savedOnly = params.get("saved") === "true";
+
+    const savedIds = $mySchedule.get();
+
+    document.querySelectorAll<HTMLElement>("#schedule-page-cards [data-talk-card]").forEach((card) => {
+      const matchesDay = card.dataset.day === day;
+
+      const matchesTrack = !track || card.dataset.track === track;
+
+      const matchesSaved = !savedOnly || savedIds.includes(card.dataset.talkId ?? "");
+
+      card.hidden = !(matchesDay && matchesTrack && matchesSaved);
+    });
+  }
+
+  document.addEventListener("astro:page-load", filterScheduleCards);
+  window.addEventListener("popstate", filterScheduleCards);
+  window.addEventListener("schedule-filters-change", filterScheduleCards);
+
+  $mySchedule.subscribe(filterScheduleCards);
+</script>
