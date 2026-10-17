@@ -1,284 +1,263 @@
 # Frontend Mentor - Tech Conference Site
 
-![Design preview for the Tech Conference Site coding challenge](./preview.jpg)
+A responsive, multi-page conference website for **DevHorizon 2026**. Visitors can explore the event, browse its speakers and talk programme, save sessions to a personal schedule, and export sessions as calendar files. The app is built with Astro, TypeScript, React islands, and Tailwind CSS, and includes Progressive Web App support.
 
-## Welcome! 👋
+## Table of contents
 
-Thanks for purchasing this premium Frontend Mentor coding challenge.
+- [Overview](#overview)
+  - [The challenge](#the-challenge)
+  - [Screenshot](#screenshot)
+  - [Links](#links)
+  - [Application features](#application-features)
+  - [Schedule and saved sessions](#schedule-and-saved-sessions)
+  - [Data model](#data-model)
+  - [Accessibility](#accessibility)
+  - [Progressive Web App](#progressive-web-app)
+- [Getting started](#getting-started)
+- [Project structure](#project-structure)
+- [My process](#my-process)
+  - [Built with](#built-with)
+  - [How the application works](#how-the-application-works)
+  - [What I learned](#what-i-learned)
+  - [Continued development](#continued-development)
+  - [Useful resources](#useful-resources)
+  - [AI collaboration](#ai-collaboration)
+- [Author](#author)
+- [Acknowledgments](#acknowledgments)
 
-[Frontend Mentor](https://www.frontendmentor.io) challenges help you improve your coding skills by building realistic projects. These premium challenges are perfect portfolio pieces, so please feel free to use what you create in your portfolio to show others.
+## Overview
 
-**To do this challenge, you need a strong understanding of HTML, CSS, and JavaScript.**
+### The challenge
 
-## The challenge
+This project is a complete conference information and planning site based on the [Frontend Mentor Tech Conference Site challenge](https://www.frontendmentor.io/challenges/tech-conference-site). It brings together the main information attendees need: what the event is about, who is speaking, what sessions are happening, and how to keep track of sessions they want to attend.
 
-Your challenge is to build out this multi-page tech conference site and get it looking as close to the design as possible.
+The interface is designed to adapt from small mobile screens to larger desktop screens. Shared conference information is presented consistently across the home, schedule, and speakers pages.
 
-You can use any tools you like to help you complete the challenge. So if you've got something you'd like to practice, feel free to give it a go.
+### Screenshot
 
-Your users should be able to:
+![Screenshot of the DevHorizon 2026 conference website](./public/screenshot.jpg)
 
-### Home Page
+### Links
 
-- See the conference brand, tagline, dates, and venue in the hero section
-- View the featured keynote, including the speaker, talk title, and session time
-- Browse the conference tracks with their names and descriptions
-- See a grid of featured speakers, each card linking through to the speakers page
-- Browse the schedule highlights with key talks pulled from across the three days
-- Use call-to-action links to navigate to the full schedule and speakers pages
+- Frontend Mentor solution: [Tech Conference Site solution](https://www.frontendmentor.io/solutions/tech-conference-app-with-pwa-support-astro-typescript-react-dEomX2O7oz)
+- Live site: [tech-conference-ashen.vercel.app](https://tech-conference-ashen.vercel.app/)
 
-### Schedule
+### Application features
 
-- View the full conference schedule organised by day
-- Filter the schedule by day (Day 01, Day 02, or Day 03)
-- Filter the schedule by track (Frontend, Performance, A11y, or Tooling), with multiple track filters active at once
-- Combine day and track filters to narrow down the list
-- Expand and collapse each talk to show or hide its description and location
-- Save talks to a personal "My Schedule" using the bookmark button on each talk
-- Filter the schedule to show only saved talks via the "My Schedule" filter
-- Clear all active filters with the "Clear" button
+#### Home page
 
-### Speakers
+The home page introduces the event and directs visitors to the detailed programme:
 
-- Browse all speakers in a responsive card grid, each card showing the speaker's photo, name, role, company, and the title of their talk
-- Open a modal for any speaker to read their full bio and see their session
-- Save the speaker's talk to "My Schedule" directly from inside the modal
-- Close the modal by clicking the close button, clicking the overlay, or pressing Escape
+- A hero panel presents the conference tagline, date range, and venue.
+- A featured keynote panel highlights Elena Vasquez, her keynote, and its session time and room. Its **View talk** link opens the schedule with that talk expanded.
+- A tracks section introduces Frontend, Performance, Accessibility, and Tooling. Each track links to the schedule filtered to that track.
+- A featured-speakers section shows speakers flagged as featured in the data and links to the full speaker directory.
+- Schedule highlights show talks flagged as highlighted in the conference data. The talk cards can be expanded to reveal descriptions and room locations.
+- A **View full schedule** call to action opens the complete programme.
 
-### UI & Accessibility
+#### Schedule page
 
-- View the optimal layout for the interface depending on their device's screen size
-- See hover and focus states for all interactive elements on the page
-- Navigate the entire site using only their keyboard
+The schedule page displays the talks as a list of cards. Each card includes its track, talk title, speaker and company, start and end time, day, and an add-to-schedule control.
 
-### Data Model
+- **Day filters:** Choose one conference day at a time. The default is Day 1 when no day is specified in the URL.
+- **Track filter:** Choose one track at a time. Track names are Frontend, Performance, Accessibility (labelled **a11y** in the filter), and Tooling. The Keynote track is not offered as a filter.
+- **My Schedule filter:** Show only the sessions saved in this browser. It can be used together with the selected day and track.
+- **Reset filters:** Clear the query parameters and return to the default Day 1 view.
+- **Clear my schedule:** Remove all saved session IDs from the local saved schedule.
+- **Talk details:** Expand a card to read the full description and room. Only the talk selected through the `talk` URL parameter opens automatically; the control updates the URL when toggled.
+- **Empty state:** If the selected day, track, and saved-only combination has no matching talks, a status message suggests changing or resetting filters.
+- **Calendar exports:** Download every conference talk or only saved talks as an `.ics` calendar file. If there are no saved talks, the saved-schedule action displays a short message instead of downloading an empty file.
 
-A `data.json` file is provided with the conference content used across all three pages. It has four top-level keys: `conference`, `tracks`, `speakers`, and `talks`.
+Day, track, saved-only, and expanded-talk state are represented in the URL query string. This makes a filtered or expanded schedule view linkable and allows browser Back and Forward navigation to restore previous views.
 
-```json
-{
-  "conference": {
-    "name": "DevHorizon 2026",
-    "brandCode": "DEVHORIZON_26",
-    "tagline": "where code meets the machine_",
-    "startDate": "2026-11-15",
-    "endDate": "2026-11-17",
-    "location": {
-      "venue": "Pier 70",
-      "city": "San Francisco",
-      "cityAbbreviation": "SF",
-      "state": "CA"
-    }
-  },
-  "tracks": [
-    {
-      "id": "tr_1",
-      "name": "Frontend",
-      "description": "Building modern interfaces for the web",
-      "color": "#FFE6BA"
-    }
-  ],
-  "speakers": [
-    {
-      "id": "sp_0",
-      "name": "Elena Vasquez",
-      "role": "Principal Frontend Engineer",
-      "company": "Bytecraft",
-      "avatar": "./assets/images/avatar-elena-vasquez.webp",
-      "bio": "Elena has spent the last decade...",
-      "featured": true
-    }
-  ],
-  "talks": [
-    {
-      "id": "tk_0",
-      "title": "The Next Frontier of Web Development",
-      "speakerId": "sp_0",
-      "day": 1,
-      "trackId": "tr_0",
-      "startTime": "9:00",
-      "endTime": "10:00",
-      "location": "Room A",
-      "description": "The opening keynote...",
-      "highlighted": false
-    }
-  ]
-}
-```
+#### Speakers page
 
-#### Conference properties
+The speakers page presents all speakers in a responsive card grid. Cards show the speaker's portrait, name, role, company, and talk title. Activating a speaker name opens a dialog with:
 
-| Property | Type | Description |
-| --- | --- | --- |
-| `name` | string | Display name of the conference |
-| `brandCode` | string | Logo/brand code shown in the header and footer (e.g., `DEVHORIZON_26`) |
-| `tagline` | string | Hero heading text |
-| `startDate` | string | First day of the conference in `YYYY-MM-DD` format |
-| `endDate` | string | Last day of the conference in `YYYY-MM-DD` format |
-| `location` | object | Venue and city details |
+- A larger speaker portrait, role, and company.
+- The speaker's full biography.
+- Their associated talk, including its track, time, and a control to save or remove it from **My Schedule**.
+- Dialog close controls, including the close button, backdrop interaction, and Escape-key support provided by the dialog component.
 
-#### Track properties
+The home page reuses the same speaker cards for the featured subset.
 
-| Property | Type | Description |
-| --- | --- | --- |
-| `id` | string | Unique identifier for each track |
-| `name` | string | Display name of the track |
-| `description` | string | Short description shown on the home page tracks section |
-| `color` | string | Hex color used for the track's background on talk cards, speaker cards, and the modal speaker photo |
+#### Shared site interface
 
-The `Keynote` track is treated as a special track. It powers the featured keynote on the home page and should be excluded from the tracks listings shown in the home page tracks section, the footer tracks list, and the schedule track filters.
+- A shared header links to Home, Schedule, and Speakers. The active desktop page is indicated in the navigation.
+- On narrow screens, navigation is provided by a slide-in menu drawer with open and close controls.
+- A shared footer provides navigation links, track links, venue details, the event dates, copyright, and a smooth **Back to top** control.
+- Page titles and descriptions are set per route for document metadata.
 
-#### Speaker properties
+### Schedule and saved sessions
 
-| Property | Type | Description |
-| --- | --- | --- |
-| `id` | string | Unique identifier for each speaker |
-| `name` | string | Speaker's full name |
-| `role` | string | Speaker's job title |
-| `company` | string | Company the speaker works at |
-| `avatar` | string | Relative path to the speaker's avatar image |
-| `bio` | string | Full bio shown in the speaker modal |
-| `featured` | boolean | Whether to include this speaker in the home page Featured Speakers grid |
+Saved sessions are identified by talk IDs and managed through a Nanostores persistent store. The store serializes the list to browser storage, so a visitor's selections remain available after reloading or reopening the site in the same browser. No account or server-side profile is required.
 
-#### Talk properties
+The star control is available on schedule cards and inside a speaker's talk dialog. It exposes its action and pressed state through accessible button attributes. The **My Schedule** filter reads the same saved IDs, and the saved-calendar export uses those IDs to select which events to include.
 
-| Property | Type | Description |
-| --- | --- | --- |
-| `id` | string | Unique identifier for each talk |
-| `title` | string | Talk title |
-| `speakerId` | string | The `id` of the speaker giving this talk |
-| `day` | number | Conference day the talk takes place on (`1`, `2`, or `3`) |
-| `trackId` | string | The `id` of the track this talk belongs to |
-| `startTime` | string | Start time in 24-hour `H:MM` format |
-| `endTime` | string | End time in 24-hour `H:MM` format |
-| `location` | string | Room the talk is held in |
-| `description` | string | Talk description shown when the user expands a schedule item or opens the speaker modal |
-| `highlighted` | boolean | Whether to include this talk in the home page Schedule Highlights section |
+Calendar exports use the conference start date plus each talk's day number to determine its date. Talk title, description, room, start time, and end time are included in the generated calendar events. Talks outside the configured conference date range are skipped.
 
-### Data Persistence
+### Data model
 
-The list of talks a user has saved to "My Schedule" should persist across browser sessions. When a user saves or unsaves a talk, that change should be remembered when they close and reopen the site. `localStorage` is a natural fit for this — there's no need for user accounts on a conference site.
+Conference content is maintained in [src/lib/data/data.json](./src/lib/data/data.json). The JSON contains four top-level properties:
 
-### Optional: Practice with a headless CMS
+| Property | Purpose |
+| --- | --- |
+| `conference` | Event name, brand code, tagline, start and end dates, and venue location. |
+| `tracks` | Track IDs, names, descriptions, and colors. |
+| `speakers` | Speaker IDs, names, roles, companies, avatar paths, biographies, and featured flags. |
+| `talks` | Talk IDs, titles, speaker and track references, day, start and end times, room, description, and highlighted flag. |
 
-A tech conference site doesn't need user accounts or a custom database, but it's a great fit for practising **content management**. If you want to take this challenge a step further, try moving the contents of `data.json` into a headless CMS and pulling it into your site on a read-only basis.
+Talks reference speakers and tracks by ID. The pages resolve those references at render time to show names, descriptions, and track colors. The separate [src/lib/data/tracks.ts](./src/lib/data/tracks.ts) provides the labels, URL values, and descriptions used by the home page and footer track links.
 
-Some popular options to explore:
+The `Keynote` track is used for the featured keynote content. It is intentionally omitted from the general track links and schedule track filters. The `featured` speaker flag controls which speaker cards appear on the home page; the `highlighted` talk flag controls which talks appear in the home page schedule highlights.
 
-- [Sanity](https://www.sanity.io/)
-- [Contentful](https://www.contentful.com/)
-- [Storyblok](https://www.storyblok.com/)
-- [Payload](https://payloadcms.com/)
-- [Strapi](https://strapi.io/)
-
-This is a realistic setup for the kind of marketing or events site you'd build in the wild — the editorial team owns the content in the CMS, and your code's job is to fetch it, model it, and render it. You'll get practice modelling content types (conference, tracks, speakers, talks), handling references between them (a talk references a speaker and a track), and choosing between build-time vs. runtime data fetching.
-
-### Expected Behaviors
-
-- **Featured keynote**: The home page hero pairs with a featured keynote card showing the talk in the `Keynote` track and the speaker giving it
-- **Track colors**: Each track's `color` is used as the background for talk cards on the home page schedule highlights, the schedule list, the featured keynote card, the featured speaker cards, and the speaker photo background inside the modal. Speaker cards use the color of the track for the talk that speaker is giving
-- **Schedule defaults**: On first load, the schedule page filters to Day 01 with no active track filters
-- **Track links**: When a user clicks a track from the home page tracks section or the footer tracks list, they should be taken to the schedule page with that track pre-filtered on Day 01. Every track has at least one Day 01 talk, so the user always lands on a non-empty list and can switch days from there
-- **Filter combinations**: Day filters are single-select, track filters are multi-select. The schedule list shows talks that match the selected day AND any of the selected tracks
-- **My Schedule filter**: When active, only talks the user has saved are shown. It can be combined with the day and track filters
-- **Show details**: Talk details (description and location) start collapsed and expand inline when the user toggles "Show details"
-- **Empty filter result**: If the active filter combination produces no talks, show a friendly message rather than an empty list
-- **Mobile navigation**: On smaller breakpoints, the primary navigation collapses behind a menu trigger that toggles the nav links open and closed
-
-### Modal Behavior
-
-- The speaker modal opens when the user activates a speaker card on the speakers page
-- Close the modal when clicking the close button, clicking the overlay, or pressing Escape
-- Manage focus appropriately when opening and closing the modal so keyboard users aren't lost
+When adding or editing content, keep IDs unique and ensure each talk's `speakerId` and `trackId` point to existing records. Use day numbers that fall within the configured event dates and times in `H:MM` 24-hour format.
 
 ### Accessibility
 
-- Ensure keyboard navigation works for all interactive elements, including the schedule filters, talk expand/collapse toggles, save buttons, and the speaker modal
-- Provide visible focus styles that match the brand's accent color
-- Use appropriate semantic HTML for the navigation, lists of talks and speakers, and modal dialog
-- Provide screen reader announcements for dynamic changes (e.g., a talk being saved or unsaved, the schedule list updating after a filter change)
+Accessibility considerations implemented in the interface include:
 
-### A note about the conference dates
+- Semantic page landmarks, headings, navigation, lists, and buttons.
+- Keyboard-operable links and controls, with visible focus treatments on interactive elements.
+- `aria-pressed` state on schedule filter buttons and saved-talk buttons.
+- `aria-expanded` and `aria-controls` relationships for talk detail disclosures.
+- `aria-hidden` state on collapsed talk-detail panels, updated with the expanded state.
+- A polite live status for the schedule's no-results message.
+- Accessible names for icon-only controls, including mobile menu actions and saved-talk buttons.
+- A dialog primitive for speaker details, providing standard dialog interaction and dismissal behavior.
+- Decorative images and icons use empty alternative text where appropriate.
 
-The `data.json` file sets the conference for **November 15–17, 2026**. If you're starting this challenge after that date and want the site to feel like an upcoming event, feel free to bump the year on `conference.startDate` and `conference.endDate`. The footer copyright (`2026 DevHorizon. All rights reserved.`) is also worth updating in your HTML if you do — it's intentionally hardcoded rather than data-driven, since the brand text in the copyright doesn't map cleanly onto any single field in `data.json`. Everything else — speakers, talks, track assignments — is independent of the year, so a simple year shift is all you need.
+### Progressive Web App
 
-### Want some support on the challenge?
+The app registers a service worker through `@vite-pwa/astro` and requests immediate registration with automatic updates. A web app manifest configures the app name, theme and background colors, standalone display mode, start URL, and install icons. Workbox is configured with a navigation fallback and precaches matching JavaScript, CSS, HTML, SVG, PNG, WebP, and font files generated for the build.
 
-[Join our community](https://www.frontendmentor.io/community) and ask questions in the **#help** channel.
+The PWA setup allows supported browsers to offer an installable app experience and serves cached application assets when available. Actual offline behavior depends on the browser's service-worker support and which assets have already been cached.
 
-## Where to find everything
+## Getting started
 
-Your task is to build out the project to the Figma design file provided. You can download the design file on the platform. **Please be sure not to share it with anyone else.** The design download comes with a `README.md` file as well to help you get set up.
+### Requirements
 
-All the required assets for this project are in the `/assets` folder. The images are already exported for the correct screen size and optimized. Some are reusable at multiple screen sizes. So if you don't see an image in a specific folder, it will typically be in another folder for that page.
+- Node.js **22.12.0 or newer** (as specified by the project).
+- pnpm, used to install dependencies from the included lockfile.
 
-We also include variable and static font files for the required fonts for this project. You can choose to either link to Google Fonts or use the local font files to host the fonts yourself. Note that we've removed the static font files for the font weights that aren't needed for this project.
+### Install dependencies
 
-The design system in the design file will give you more information about the various colors, fonts, and styles used in this project. Our fonts always come from [Google Fonts](https://fonts.google.com/).
+```sh
+pnpm install
+```
 
-## Using AI coding assistants
+### Run the development server
 
-We've included two files to help you if you're using AI coding assistants (like Claude, GitHub Copilot, Cursor, etc.) while working on this challenge:
+```sh
+pnpm dev
+```
 
-- `AGENTS.md` - Contains detailed instructions for AI assistants on how to help you with this challenge. It's tailored to this challenge's difficulty level, so the AI will provide guidance appropriate to your learning stage—offering more support for beginner challenges and encouraging more independence on advanced ones.
-- `CLAUDE.md` - A pointer file that directs Claude-based tools to the AGENTS.md instructions.
+Astro starts the local development server and prints its URL in the terminal.
 
-**How to use them:** You don't need to do anything! These files are automatically detected by most AI coding tools. The AI will read them and adjust its behavior to be a better learning partner—guiding you toward solutions rather than just giving you the answers.
+### Build and preview
 
-**Note:** These files are designed to help you *learn*, not to do the work for you. The AI is instructed to ask questions, give hints, and explain concepts rather than writing complete solutions.
+```sh
+pnpm build
+pnpm preview
+```
 
-## Building your project
+The production build is written to `dist/`. The preview command serves that build locally.
 
-Feel free to use any workflow that you feel comfortable with. Below is a suggested process, but do not feel like you need to follow these steps:
+## Project structure
 
-1. Separate the `starter-code` from the rest of this project and rename it to something meaningful for you. Initialize the codebase as a public repository on [GitHub](https://github.com/). Creating a repo will make it easier to share your code with the community if you need help. If you're not sure how to do this, [have a read-through of this Try Git resource](https://try.github.io/). **⚠️ IMPORTANT ⚠️: There are already a couple of `.gitignore` files in this project. Please do not remove them or change the content of the files. If you create a brand new project, please use the `.gitignore` files provided in your new codebase. This is to avoid the accidental upload of the design files to GitHub. With these premium challenges, please be sure not to share the design files in your GitHub repo. Thanks!**
-2. Configure your repository to publish your code to a web address. This will also be useful if you need some help during a challenge as you can share the URL for your project with your repo URL. There are a number of ways to do this, and we provide some recommendations below.
-3. Look through the designs to start planning out how you'll tackle the project. This step is crucial to help you think ahead for CSS classes to create reusable styles.
-4. Before adding any styles, structure your content with HTML. Writing your HTML first can help focus your attention on creating well-structured content.
-5. Write out the base styles for your project, including general content styles, such as `font-family` and `font-size`.
-6. Start adding styles to the top of the page and work down. Only move on to the next section once you're happy you've completed the area you're working on.
+```text
+public/                       Static images, icons, and web manifest
+  images/                     Speaker portraits
+  screenshot.jpg              README project screenshot
+src/
+  assets/                     Bundled SVG patterns and local font files
+  components/
+    client/                   Interactive React islands
+    footer/                   Shared footer sections
+    header/                   Shared desktop/mobile navigation
+    home/                     Home page sections
+    schedule/                 Talk cards, filters, and calendar actions
+    speakers-page/            Speaker directory and cards
+    svgs/                     Reusable SVG components
+    ui/                       Shared UI components
+  layouts/                    Shared page layout, metadata, and containers
+  lib/
+    data/                     Conference JSON and navigation/track links
+    types/                    TypeScript data and component types
+  pages/                      Astro route entry points
+  stores/                     Persistent My Schedule state
+  styles/                     Global Tailwind theme and styles
+  utils/                      Date formatting and calendar generation
+astro.config.mjs              Astro, React, Tailwind, fonts, and PWA setup
+package.json                  Scripts and dependencies
+pnpm-lock.yaml                Locked dependency versions
+```
 
-## Deploying your project
+## My process
 
-As mentioned above, there are many ways to host your project for free. Our recommended hosts are:
+### Built with
 
-- [GitHub Pages](https://pages.github.com/)
-- [Vercel](https://vercel.com/)
-- [Netlify](https://www.netlify.com/)
+- [Astro](https://astro.build/) for page routing, layouts, and server-rendered components.
+- [TypeScript](https://www.typescriptlang.org/) for typed application code and content interfaces.
+- [React](https://react.dev/) for interactive client-side components.
+- [Tailwind CSS](https://tailwindcss.com/) for responsive utility styling and the project design tokens.
+- [Nanostores](https://nanostores.github.io/nanostores/) and its persistent adapter for the saved-talk state.
+- [Base UI](https://base-ui.com/) for accessible dialog and drawer primitives.
+- [Lucide](https://lucide.dev/) icons for interface controls.
+- [ics](https://github.com/adamgibbons/ics) for generating downloadable calendar files.
+- [Vite PWA](https://vite-pwa-org.netlify.app/) for service-worker registration, manifest support, and Workbox configuration.
+- Local Chakra Petch and JetBrains Mono fonts.
+- Responsive layouts using CSS Grid, Flexbox, and mobile-first breakpoints.
 
-You can host your site using one of these solutions or any of our other trusted providers. [Read more about our recommended and trusted hosts](https://www.frontendmentor.io/guides/hosting-your-solution).
+### How the application works
 
-## Create a custom `README.md`
+Astro renders the page structure and the largely static conference content. React is used where the interface needs client-side state or accessible overlay behavior: mobile navigation, saved-talk controls, and speaker dialogs. The schedule filter and talk disclosure behavior use small browser-side scripts.
 
-We strongly recommend overwriting this `README.md` with a custom one. We've provided a template inside the [`README-template.md`](./README-template.md) file in this starter code.
+Schedule filters and the selected talk are encoded in query parameters. The schedule page reads those parameters, compares them with data attributes on each rendered talk card, and hides cards that do not match. Filter actions update browser history and dispatch an event so the list can be refreshed without a full page reload.
 
-The template provides a guide for what to add. A custom `README` will help you explain your project and reflect on your learnings. Please feel free to edit our template as much as you like.
+### What I learned
 
-Once you've added your information to the template, delete this file and rename the `README-template.md` file to `README.md`. That will make it show up as your repository's README file.
+This project brought together several patterns that work well for a content-heavy event site:
 
-## Submitting your solution
+- Keep structured content separate from presentation. Stable speaker, talk, and track IDs make it straightforward to connect related records.
+- Use Astro for pages that are mostly content, then hydrate React components only where browser interaction is needed.
+- Treat the URL as shareable interface state for filters and open talk details. This also makes browser history useful instead of leaving filter changes invisible to navigation.
+- Keep shared saved-session state in one persistent store so cards, filters, and exports all use the same source of truth.
+- Generate calendar events from conference dates and talk times rather than maintaining separate downloadable files.
+- Establish a small theme with named colors, type presets, and button variants so the same design language can be applied throughout the site.
 
-Submit your solution on the platform for the rest of the community to see. Follow our ["Complete guide to submitting solutions"](https://www.frontendmentor.io/guides/how-to-submit-solutions) for tips on how to do this.
+### Continued development
 
-Remember, if you're looking for feedback on your solution, be sure to ask questions when submitting it. The more specific and detailed you are with your questions, the higher the chance you'll get valuable feedback from the community.
+Possible next improvements include:
 
-**⚠️ IMPORTANT ⚠️: With these premium challenges, please be sure not to upload the design files to GitHub when you're submitting to the platform and sharing it around. If you've created a brand new project, the easiest way to do that is to copy across the `.gitignore` provided in this starter project.**
+- Allow selecting multiple tracks at once, if the schedule experience should support combined track selection.
+- Add dedicated automated checks for filter combinations, persistence, calendar export dates, and dialog keyboard interactions.
+- Improve PWA feedback by surfacing service-worker registration and offline-ready state to visitors.
+- Review screen-reader announcements for saved-session changes and filter result counts, in addition to the existing no-results status.
+- Make all event-specific display text, including venue and keynote presentation details, derive from the conference data rather than fixed component text.
+- Add an event timezone field so calendar exports can represent the venue's local time explicitly.
 
-## Sharing your solution
+### Useful resources
 
-There are multiple places you can share your solution:
+- [Astro documentation](https://docs.astro.build/) - Guides for Astro pages, components, layouts, and integrations.
+- [Astro routing](https://docs.astro.build/en/guides/routing/) - Reference for the file-based routes used by the app.
+- [Astro framework components](https://docs.astro.build/en/guides/framework-components/) - Explains how React components can be included in Astro pages.
+- [Tailwind CSS documentation](https://tailwindcss.com/docs) - Utilities and configuration reference for responsive styling.
+- [Nanostores documentation](https://nanostores.github.io/nanostores/) - Small reactive stores used for saved sessions.
+- [Vite PWA documentation](https://vite-pwa-org.netlify.app/) - Service-worker and web app manifest configuration.
+- [MDN: ARIA](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA) - Reference for the accessibility attributes used by interactive controls.
 
-1. Share your solution page in the **#finished-projects** channel of our [community](https://www.frontendmentor.io/community). 
-2. Share on [X (formerly Twitter)](https://x.com/frontendmentor) and mention **@frontendmentor**, including the repo and live URLs in your post. We'd love to take a look at what you've built and help share it around.
-3. Share your solution on [LinkedIn](https://www.linkedin.com/company/frontend-mentor/).
-4. Blog about your experience building your project. Writing about your workflow, technical choices, and talking through your code is a brilliant way to reinforce what you've learned. Great platforms to write on are [dev.to](https://dev.to/), [Hashnode](https://hashnode.com/), and [CodeNewbie](https://community.codenewbie.org/).
+### AI collaboration
 
-We provide templates to help you share your solution once you've submitted it on the platform. Please do edit them and include specific questions when you're looking for feedback. 
+AI assistance was used to prepare this README from the project source. The implementation details were checked against the pages, components, data, and configuration in the repository. This note describes the documentation work and does not claim that AI was used for the original application implementation.
 
-The more specific you are with your questions the more likely it is that another member of the community will give you feedback.
+## Author
 
-## Got feedback for us?
+- Frontend Mentor solution: [Tech Conference Site](https://www.frontendmentor.io/solutions/tech-conference-app-with-pwa-support-astro-typescript-react-dEomX2O7oz)
 
-We love receiving feedback! We're always looking to improve our challenges and our platform. So if you have anything you'd like to mention, please email hi[at]frontendmentor[dot]io.
+Personal profile links are omitted because no author profile details were provided.
 
-**Have fun building!** 🚀
+## Acknowledgments
+
+- [Frontend Mentor](https://www.frontendmentor.io/) for the Tech Conference Site challenge and project brief.
+- The maintainers of Astro, React, Tailwind CSS, Nanostores, Base UI, Lucide, ics, and Vite PWA for the tools and documentation used by the project.
