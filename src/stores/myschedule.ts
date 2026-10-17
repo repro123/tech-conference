@@ -2,7 +2,15 @@ import { persistentAtom } from "@nanostores/persistent";
 
 export const $mySchedule = persistentAtom<string[]>("my-schedule", [], {
   encode: JSON.stringify,
-  decode: JSON.parse,
+  decode: (value) => {
+    try {
+      const parsed: unknown = JSON.parse(value);
+
+      return Array.isArray(parsed) && parsed.every((item) => typeof item === "string") ? parsed : [];
+    } catch {
+      return [];
+    }
+  },
 });
 
 export function toggleSchedule(id: string) {
