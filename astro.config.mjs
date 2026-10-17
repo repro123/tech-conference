@@ -1,13 +1,36 @@
 // @ts-check
 import { defineConfig, fontProviders } from "astro/config";
-
 import react from "@astrojs/react";
-
 import tailwindcss from "@tailwindcss/vite";
+import AstroPWA from "@vite-pwa/astro";
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [react()],
+  integrations: [
+    react(),
+    AstroPWA({
+      registerType: "autoUpdate",
+      manifest: {
+        name: "Tech Conference 2026",
+        short_name: "TechConf",
+        description: "Schedule and speakers",
+        theme_color: "#00151d",
+        background_color: "#00151d",
+        display: "standalone",
+        start_url: "/",
+        icons: [
+          { src: "/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
+          { src: "/android-chrome-512x512.png", sizes: "512x512", type: "image/png" },
+          { src: "/android-chrome-512x512.png", sizes: "512x512", type: "image/png", purpose: "any" },
+          { src: "/android-chrome-512x512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
+        ],
+      },
+      workbox: {
+        navigateFallback: "/",
+        globPatterns: ["**/*.{js,css,html,svg,png,webp,woff2,ttf}"],
+      },
+    }),
+  ],
 
   vite: {
     plugins: [tailwindcss()],
