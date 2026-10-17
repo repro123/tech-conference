@@ -158,7 +158,7 @@
 }
 
 @utility preset-2-tablet {
-  font-size: 28px;
+  font-size: 1.75rem;
   line-height: 110%;
   font-weight: 700;
   font-family: var(--font-chakra);
