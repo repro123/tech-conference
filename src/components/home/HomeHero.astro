@@ -3,6 +3,7 @@ import Container from "@/layouts/Container.astro";
 import HorizonBGSVG from "@/components/svgs/HorizonBGSVG.astro";
 import SecondaryHeading from "@/components/ui/SecondaryHeading.astro";
 import slugify from "slugify";
+import { formatDateRange } from "@/utils/formatDate";
 
 import Button from "@/components/ui/Button";
 import { ArrowRight } from "@lucide/astro";
@@ -26,7 +27,7 @@ const keynote = ConferenceData.talks[0];
       </div>
 
       <div class="flex items-center justify-between gap-4 border-t preset-6 uppercase pt-4 mt-28">
-        <p>Nov 15-17, 2026</p>
+        <p>{formatDateRange(conference.startDate, conference.endDate)}</p>
         <p>{conference.location.venue}, {conference.location.cityAbbreviation}</p>
       </div>
     </div>
