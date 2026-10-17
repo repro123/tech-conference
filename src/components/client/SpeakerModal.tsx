@@ -34,7 +34,7 @@ export default function SpeakerModal({ open, setOpen, speaker, talk, track }: Sp
                 <img alt={speaker?.name} src={speaker?.avatar} className="relative size-full object-cover max-w-full" />
               </div>
               <figcaption className="flex flex-col gap-1">
-                <h2 className="preset-3 text-neutral-100 lowercase">{speaker?.name}</h2>
+                <Dialog.Title className="preset-3 text-neutral-100 lowercase">{speaker?.name}</Dialog.Title>
                 <p className="preset-6-medium uppercase">
                   {speaker?.role} @ {speaker?.company}
                 </p>
