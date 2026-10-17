@@ -10,60 +10,56 @@ const days = [...new Set(talks.map((talk) => talk.day))].sort((a, b) => a - b);
 const trackLabels = [...new Set(tracks.map((track) => track.name))];
 ---
 
-<section>
-  <Container>
-    <div class="flex items-center gap-4 flex-wrap" id="schedule-filters" role="group" aria-label="Filter talks">
-      {
-        days.map((day) => (
+<Container>
+  <div class="flex items-center gap-4 flex-wrap" id="schedule-filters" role="group" aria-label="Filter talks">
+    {
+      days.map((day) => (
+        <Button
+          variant="accent"
+          size="sm"
+          data-filter-day
+          type="button"
+          className="preset-6-medium"
+          value={day}
+          aria-pressed="false"
+        >
+          day {day}
+        </Button>
+      ))
+    }
+    <span aria-hidden="true" class="self-stretch border-l border-neutral-100"></span>
+    {
+      trackLabels.map((track) => {
+        const label = track.toLowerCase() === "accessibility" ? "a11y" : track;
+        return (
           <Button
             variant="accent"
             size="sm"
-            data-filter-day
+            data-filter-track
             type="button"
-            className="preset-6-medium"
-            value={day}
+            className="preset-6-medium rounded-full"
+            value={label.toLowerCase()}
             aria-pressed="false"
           >
-            day {day}
+            {label}
           </Button>
-        ))
-      }
-      <span aria-hidden="true" class="self-stretch border-l border-neutral-100"></span>
-      {
-        trackLabels.map((track) => {
-          const label = track.toLowerCase() === "accessibility" ? "a11y" : track;
-          return (
-            <Button
-              variant="accent"
-              size="sm"
-              data-filter-track
-              type="button"
-              className="preset-6-medium rounded-full"
-              value={label.toLowerCase()}
-              aria-pressed="false"
-            >
-              {label}
-            </Button>
-          );
-        })
-      }
-      <Button
-        variant="schedule"
-        size="sm"
-        data-filter-saved
-        type="button"
-        className="preset-6-medium rounded-full border-dashed"
-        value="saved"
-        aria-pressed="false"
-      >
-        my schedule
-      </Button>
-      <Button variant="clear" size="sm" id="clear" type="button" className="preset-6-medium rounded-full">
-        clear
-      </Button>
-    </div>
-  </Container>
-</section>
+        );
+      })
+    }
+    <Button
+      variant="schedule"
+      size="sm"
+      data-filter-saved
+      type="button"
+      className="preset-6-medium rounded-full border-dashed"
+      value="saved"
+      aria-pressed="false"
+    >
+      my schedule
+    </Button>
+    <Button variant="clear" size="sm" id="clear" type="button" className="preset-6-medium rounded-full"> clear </Button>
+  </div>
+</Container>
 
 <script>
   document.addEventListener("astro:page-load", () => {

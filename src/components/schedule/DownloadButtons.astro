@@ -1,0 +1,91 @@
+---
+import Container from "@layouts/Container.astro";
+import Button from "@components/ui/Button";
+import slugify from "slugify";
+import { Download } from "@lucide/astro";
+
+const downloadBtns = ["download all schedules", "download my schedules"];
+---
+
+<div>
+  <Container class="flex items-center flex-wrap gap-4">
+    {
+      downloadBtns.map((btn) => (
+        <Button variant="accent" size="sm" className="preset-6-medium" id={slugify(btn, { lower: true })}>
+          <Download class="size-4" /> <span>{btn}</span>
+        </Button>
+      ))
+    }
+  </Container>
+</div>
+
+<script>
+  import { downloadCalendar } from "@/utils/calendar";
+  import conferenceData from "@lib/data/data.json";
+  import { $mySchedule } from "@/stores/myschedule";
+
+  const allTalks = conferenceData.talks;
+  const { startDate, endDate } = conferenceData.conference;
+  const messageTimers = new WeakMap<HTMLButtonElement, number>();
+
+  function showSuccess(btn: HTMLButtonElement, message: string) {
+    const label = btn.querySelector("span");
+    if (!label) return;
+
+    const originalText = label.textContent;
+    label.textContent = message;
+    btn.disabled = true;
+
+    window.setTimeout(() => {
+      label.textContent = originalText;
+      btn.disabled = false;
+    }, 3000);
+  }
+
+  function showMessage(btn: HTMLButtonElement, message: string) {
+    const label = btn.querySelector("span");
+    if (!label) return;
+
+    const originalText = btn.dataset.originalLabel ?? label.textContent ?? "";
+    const existingTimer = messageTimers.get(btn);
+    if (existingTimer) window.clearTimeout(existingTimer);
+    label.textContent = message;
+
+    const timer = window.setTimeout(() => {
+      label.textContent = originalText;
+      messageTimers.delete(btn);
+    }, 3000);
+    messageTimers.set(btn, timer);
+  }
+
+  function bind(selector: string, onClick: (btn: HTMLButtonElement) => void) {
+    const btn = document.querySelector<HTMLButtonElement>(selector);
+    if (!btn || btn.dataset.initialized === "true") return;
+
+    btn.dataset.initialized = "true";
+    btn.dataset.originalLabel = btn.querySelector("span")?.textContent ?? "";
+    btn.addEventListener("click", () => onClick(btn));
+  }
+
+  document.addEventListener("astro:page-load", () => {
+    bind("#download-all-schedules", (btn) => {
+      if (downloadCalendar(allTalks, startDate, endDate)) {
+        showSuccess(btn, "Schedule downloaded!");
+      }
+    });
+
+    bind("#download-my-schedules", (btn) => {
+      const savedIds = $mySchedule.get();
+      const myTalks = allTalks.filter((talk) => savedIds.includes(talk.id));
+
+      if (myTalks.length === 0) {
+        showMessage(btn, "No saved talks yet");
+        return;
+      }
+
+      if (downloadCalendar(myTalks, startDate, endDate)) {
+        showSuccess(btn, "My schedule downloaded!");
+      }
+    });
+  });
+</script>

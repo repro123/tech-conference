@@ -1,6 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import FilterButtons from "@/components/schedule/FilterButtons.astro";
+import DownloadButtons from "@/components/schedule/DownloadButtons.astro";
 import ScheduleCards from "@/components/schedule/ScheduleCards.astro";
 import Container from "@/layouts/Container.astro";
 
@@ -15,7 +16,11 @@ const tracks = ConferenceData.tracks;
   description="View the full schedule of our tech conference, including keynote sessions,and other events. Plan your experience and make the most of your time at the conference."
 >
   <main class="px-4 py-6 space-y-12">
-    <FilterButtons />
+    <section class="space-y-8">
+      <FilterButtons />
+
+      <DownloadButtons />
+    </section>
 
     <Container id="schedule-page-cards">
       <ScheduleCards talks={talks} tracks={tracks} speakers={speakers} isSchedulePage={true} />
