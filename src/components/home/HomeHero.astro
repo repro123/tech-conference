@@ -11,11 +11,10 @@ import { ArrowRight } from "@lucide/astro";
 import { getConference } from "@/lib/sanity/conference";
 import { getSpeakers } from "@/lib/sanity/speakers";
 import { getTalks } from "@/lib/sanity/talks";
+
 import { urlFor } from "@lib/sanity/image";
 
-const conference = await getConference();
-const speakers = await getSpeakers();
-const talks = await getTalks();
+const [conference, talks, speakers] = await Promise.all([getConference(), getTalks(), getSpeakers()]);
 
 const keynoteTalk = talks[0];
 const keynoteSpeaker = speakers.find((speaker) => speaker.id === keynoteTalk.speaker._ref);
