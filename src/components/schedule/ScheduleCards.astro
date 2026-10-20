@@ -1,7 +1,5 @@
 ---
-import type { Talk } from "@lib/types/talk";
-import type { Track } from "@lib/types/track";
-import type { Speaker } from "@lib/types/speaker";
+import type { Talk, Track, Speaker } from "@lib/sanity/types";
 import slugify from "slugify";
 
 import Barcode from "@assets/images/pattern-barcode.svg";
@@ -21,8 +19,8 @@ const { talks, tracks, speakers, isSchedulePage = false } = Astro.props;
 <ul class="mt-6 grid gap-4">
   {
     talks.map((talk) => {
-      const track = tracks.find((track) => track.id === talk.trackId);
-      const speaker = speakers.find((speaker) => speaker.id === talk.speakerId);
+      const track = tracks.find((track) => track.id === talk.track?._ref);
+      const speaker = speakers.find((speaker) => speaker.id === talk.speaker?._ref);
       const trackLabel = track?.name.toLowerCase() === "accessibility" ? "a11y" : track?.name;
       const talkSlug = slugify(talk.title, { lower: true, strict: true });
 

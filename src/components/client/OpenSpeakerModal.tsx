@@ -1,7 +1,5 @@
-import type { Speaker } from "@/lib/types/speaker";
 import { useState } from "react";
-import type { Track } from "@/lib/types/track";
-import type { Talk } from "@/lib/types/talk";
+import type { Track, Talk, Speaker } from "@lib/sanity/types";
 
 import SpeakerModal from "@/components/client/SpeakerModal";
 

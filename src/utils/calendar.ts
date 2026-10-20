@@ -1,5 +1,5 @@
 import { createEvents } from "ics";
-import type { Talk } from "@/lib/types/talk";
+import type { Talk } from "@/lib/sanity/types";
 
 function getConferenceDate(startDate: string, day: number) {
   const [year, month, date] = startDate.split("-").map(Number);

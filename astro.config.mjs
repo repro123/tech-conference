@@ -4,6 +4,8 @@ import react from "@astrojs/react";
 import tailwindcss from "@tailwindcss/vite";
 import AstroPWA from "@vite-pwa/astro";
 
+import sanity from "@sanity/astro";
+
 // https://astro.build/config
 export default defineConfig({
   integrations: [
@@ -29,6 +31,12 @@ export default defineConfig({
         navigateFallback: "/",
         globPatterns: ["**/*.{js,css,html,svg,png,webp,woff2,ttf}"],
       },
+    }),
+    sanity({
+      projectId: "7xq89tus",
+      dataset: "production",
+      apiVersion: "2026-10-20",
+      useCdn: false, // for static builds
     }),
   ],
 

@@ -4,10 +4,25 @@ import Button from "@components/ui/Button";
 import slugify from "slugify";
 import { Download } from "@lucide/astro";
 
+import { getConference } from "@/lib/sanity/conference";
+import { getTalks } from "@/lib/sanity/talks";
+
+const [conference, allTalks] = await Promise.all([getConference(), getTalks()]);
+
+if (!conference) {
+  throw new Error("Conference data not found in Sanity.");
+}
+
+const calendarData = JSON.stringify({
+  talks: allTalks,
+  startDate: conference.startDate,
+  endDate: conference.endDate,
+});
+
 const downloadBtns = ["download all schedules", "download my schedules"];
 ---
 
-<div>
+<div data-calendar={calendarData}>
   <Container class="flex items-center flex-wrap gap-4">
     {
       downloadBtns.map((btn) => (
@@ -21,18 +36,28 @@ const downloadBtns = ["download all schedules", "download my schedules"];
 
 <script>
   import { downloadCalendar } from "@/utils/calendar";
-  import conferenceData from "@lib/data/data.json";
   import { $mySchedule } from "@/stores/myschedule";
+  import type { Talk } from "@lib/sanity/types";
 
-  const allTalks = conferenceData.talks;
-  const { startDate, endDate } = conferenceData.conference;
+  function getCalendarData(): {
+    talks: Talk[];
+    startDate: string;
+    endDate: string;
+  } | null {
+    const element = document.querySelector<HTMLElement>("[data-calendar]");
+
+    if (!element?.dataset.calendar) return null;
+
+    return JSON.parse(element.dataset.calendar);
+  }
+
   const messageTimers = new WeakMap<HTMLButtonElement, number>();
 
   function showSuccess(btn: HTMLButtonElement, message: string) {
     const label = btn.querySelector("span");
     if (!label) return;
 
-    const originalText = label.textContent;
+    const originalText = btn.dataset.originalLabel ?? label.textContent ?? "";
     label.textContent = message;
     btn.disabled = true;
 
@@ -48,18 +73,22 @@ const downloadBtns = ["download all schedules", "download my schedules"];
 
     const originalText = btn.dataset.originalLabel ?? label.textContent ?? "";
     const existingTimer = messageTimers.get(btn);
+
     if (existingTimer) window.clearTimeout(existingTimer);
+
     label.textContent = message;
 
     const timer = window.setTimeout(() => {
       label.textContent = originalText;
       messageTimers.delete(btn);
     }, 3000);
+
     messageTimers.set(btn, timer);
   }
 
   function bind(selector: string, onClick: (btn: HTMLButtonElement) => void) {
     const btn = document.querySelector<HTMLButtonElement>(selector);
+
     if (!btn || btn.dataset.initialized === "true") return;
 
     btn.dataset.initialized = "true";
@@ -69,21 +98,27 @@ const downloadBtns = ["download all schedules", "download my schedules"];
 
   document.addEventListener("astro:page-load", () => {
     bind("#download-all-schedules", (btn) => {
-      if (downloadCalendar(allTalks, startDate, endDate)) {
+      const data = getCalendarData();
+      if (!data) return;
+
+      if (downloadCalendar(data.talks, data.startDate, data.endDate)) {
         showSuccess(btn, "Schedule downloaded!");
       }
     });
 
     bind("#download-my-schedules", (btn) => {
+      const data = getCalendarData();
+      if (!data) return;
+
       const savedIds = $mySchedule.get();
-      const myTalks = allTalks.filter((talk) => savedIds.includes(talk.id));
+      const myTalks = data.talks.filter((talk) => savedIds.includes(talk.id));
 
       if (myTalks.length === 0) {
         showMessage(btn, "No saved talks yet");
         return;
       }
 
-      if (downloadCalendar(myTalks, startDate, endDate)) {
+      if (downloadCalendar(myTalks, data.startDate, data.endDate)) {
         showSuccess(btn, "My schedule downloaded!");
       }
     });

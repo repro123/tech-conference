@@ -3,3 +3,12 @@ allowBuilds:
   sharp: true
 minimumReleaseAgeExclude:
   - astro@7.3.7
+  - '@sanity/access-ui@6.20.0'
+  - '@sanity/client@8.10.0'
+  - '@sanity/diff@6.20.0'
+  - '@sanity/mutator@6.20.0'
+  - '@sanity/schema@6.20.0'
+  - '@sanity/types@6.20.0'
+  - '@sanity/util@6.20.0'
+  - '@sanity/validation@6.20.0'
+  - sanity@6.20.0

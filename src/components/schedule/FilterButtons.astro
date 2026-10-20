@@ -2,9 +2,10 @@
 import Container from "@layouts/Container.astro";
 import Button from "@components/ui/Button";
 
-import ConferenceData from "@lib/data/data.json";
-const talks = ConferenceData.talks;
-const tracks = ConferenceData.tracks;
+import { getTracks } from "@/lib/sanity/tracks";
+import { getTalks } from "@/lib/sanity/talks";
+
+const [tracks, talks] = await Promise.all([getTracks(), getTalks()]);
 
 const days = [...new Set(talks.map((talk) => talk.day))].sort((a, b) => a - b);
 const trackLabels = [...new Set(tracks.map((track) => track.name))];
