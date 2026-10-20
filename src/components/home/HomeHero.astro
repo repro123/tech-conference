@@ -3,17 +3,25 @@ import Container from "@/layouts/Container.astro";
 import HorizonBGSVG from "@/components/svgs/HorizonBGSVG.astro";
 import SecondaryHeading from "@/components/ui/SecondaryHeading.astro";
 import slugify from "slugify";
-import { formatDateRange } from "@/utils/formatDate";
+import { formatDateRange, formatStartDate } from "@/utils/formatDate";
 
 import Button from "@/components/ui/Button";
 import { ArrowRight } from "@lucide/astro";
 
-import { Image } from "astro:assets";
-import Elena from "@/assets/images/avatar-elena-vasquez.webp";
+import { getConference } from "@/lib/sanity/conference";
+import { getSpeakers } from "@/lib/sanity/speakers";
+import { getTalks } from "@/lib/sanity/talks";
+import { urlFor } from "@lib/sanity/image";
 
-import ConferenceData from "@lib/data/data.json";
-const conference = ConferenceData.conference;
-const keynote = ConferenceData.talks[0];
+const conference = await getConference();
+const speakers = await getSpeakers();
+const talks = await getTalks();
+
+const keynoteTalk = talks[0];
+const keynoteSpeaker = speakers.find((speaker) => speaker.id === keynoteTalk.speaker._ref);
+const speakerAvatar = keynoteSpeaker?.avatar;
+
+const avatarUrl = speakerAvatar ? urlFor(speakerAvatar).width(800).auto("format").url() : null;
 ---
 
 <section>
@@ -37,24 +45,37 @@ const keynote = ConferenceData.talks[0];
         <SecondaryHeading text="featured keynote" class="preset-6" />
 
         <div class="space-y-2 mt-6">
-          <p class="preset-2">elena vasquez</p>
-          <p class="preset-6-medium uppercase">principal frontend engineer @bytecraft</p>
+          <p class="preset-2">{keynoteSpeaker?.name}</p>
+          <p class="preset-6-medium uppercase">{keynoteSpeaker?.role} @{keynoteSpeaker?.company}</p>
         </div>
 
         <div class="space-y-2 mt-12">
-          <p class="preset-5-bold uppercase">{keynote.title}</p>
-          <p class="preset-6-medium uppercase">Nov 15 / {keynote.startTime} / {keynote.location}</p>
+          <p class="preset-5-bold uppercase">{keynoteTalk.title}</p>
+          <p class="preset-6-medium uppercase">
+            {formatStartDate(conference.startDate)} / {keynoteTalk.startTime} / {keynoteTalk.location}
+          </p>
         </div>
 
         <Button
-          href={`/schedule?talk=${slugify(keynote.title, { lower: true, strict: true })}`}
+          href={`/schedule?talk=${slugify(keynoteTalk.title, { lower: true, strict: true })}`}
           variant="secondary"
           className="mt-6 w-full items-center justify-center"
           >view talk <ArrowRight />
         </Button>
       </div>
 
-      <Image src={Elena} alt="Elena Vasquez" width="320" class="hidden md:block absolute bottom-0 -right-20" priority />
+      {
+        avatarUrl && (
+          <img
+            src={avatarUrl}
+            alt={keynoteSpeaker?.name ?? "Keynote speaker"}
+            width="320"
+            height="400"
+            class="hidden md:block absolute bottom-0 -right-20"
+            fetchpriority="high"
+          />
+        )
+      }
     </div>
   </Container>
 </section>
