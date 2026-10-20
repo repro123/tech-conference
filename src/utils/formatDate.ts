@@ -20,3 +20,14 @@ export function formatDateRange(startDate: string, endDate: string): string {
 
   return `${month} ${startDay} - ${endMonth} ${endDay}, ${year}`;
 }
+
+export function formatStartDate(date: string): string {
+  const [, month, day] = date.split("-");
+
+  const formattedDate = new Date(2026, Number(month) - 1, Number(day)).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
+
+  return formattedDate;
+}
