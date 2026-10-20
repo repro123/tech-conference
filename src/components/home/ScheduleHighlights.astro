@@ -8,9 +8,8 @@ import { getSpeakers } from "@/lib/sanity/speakers";
 import { getTracks } from "@/lib/sanity/tracks";
 import { getTalks } from "@/lib/sanity/talks";
 
-const tracks = await getTracks();
-const speakers = await getSpeakers();
-const allTalks = await getTalks();
+const [tracks, allTalks, speakers] = await Promise.all([getTracks(), getTalks(), getSpeakers()]);
+
 const talks = allTalks.filter((talk) => talk.highlighted);
 ---
 

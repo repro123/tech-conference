@@ -9,10 +9,9 @@ import { getSpeakers } from "@/lib/sanity/speakers";
 import { getTracks } from "@/lib/sanity/tracks";
 import { getTalks } from "@/lib/sanity/talks";
 
-const tracks = await getTracks();
-const allSpeakers = await getSpeakers();
+const [tracks, talks, allSpeakers] = await Promise.all([getTracks(), getTalks(), getSpeakers()]);
+
 const featuredSpeakers = allSpeakers.filter((speaker) => speaker.featured);
-const talks = await getTalks();
 ---
 
 <section>
