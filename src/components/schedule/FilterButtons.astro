@@ -2,14 +2,23 @@
 import Container from "@layouts/Container.astro";
 import Button from "@components/ui/Button";
 
-import ConferenceData from "@lib/data/data.json";
-const talks = ConferenceData.talks;
-const tracks = ConferenceData.tracks;
+import { getSpeakers } from "@/lib/sanity/speakers";
+import { getTracks } from "@/lib/sanity/tracks";
+import { getTalks } from "@/lib/sanity/talks";
+
+const tracks = await getTracks();
+const speakers = await getSpeakers();
+const talks = await getTalks();
 
 const days = [...new Set(talks.map((talk) => talk.day))].sort((a, b) => a - b);
 const trackLabels = [...new Set(tracks.map((track) => track.name))];
 ---
 
+<script define:vars={{ talks, tracks, speakers }}>
+  console.log("talks:", talks);
+  console.log("tracks:", tracks);
+  console.log("speakers:", speakers);
+</script>
 <Container>
   <div class="flex items-center gap-4 flex-wrap" id="schedule-filters" role="group" aria-label="Filter talks">
     {
