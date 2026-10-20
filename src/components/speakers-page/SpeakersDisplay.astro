@@ -4,10 +4,13 @@ import SecondaryHeading from "@/components/ui/SecondaryHeading.astro";
 
 import SpeakersCards from "@components/speakers-page/SpeakersCards.astro";
 
-import ConferenceData from "@lib/data/data.json";
-const speakers = ConferenceData.speakers;
-const talks = ConferenceData.talks;
-const tracks = ConferenceData.tracks;
+import { getSpeakers } from "@/lib/sanity/speakers";
+import { getTracks } from "@/lib/sanity/tracks";
+import { getTalks } from "@/lib/sanity/talks";
+
+const tracks = await getTracks();
+const speakers = await getSpeakers();
+const talks = await getTalks();
 ---
 
 <section>

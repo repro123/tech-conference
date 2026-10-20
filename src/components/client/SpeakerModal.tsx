@@ -2,10 +2,9 @@ import { Dialog } from "@base-ui/react/dialog";
 import Close from "@assets/images/icon-cross.svg";
 import Barcode from "@assets/images/pattern-barcode.svg";
 import AvatarBG from "@assets/images/pattern-avatar-bg.svg";
+import { urlFor } from "@lib/sanity/image";
 
-import type { Track } from "@/lib/types/track";
-import type { Talk } from "@/lib/types/talk";
-import type { Speaker } from "@/lib/types/speaker";
+import type { Track, Talk, Speaker } from "@lib/sanity/types";
 
 import AddToMySchedule from "@/components/client/AddToMySchedule";
 
@@ -18,6 +17,8 @@ interface SpeakerModalProps {
 }
 
 export default function SpeakerModal({ open, setOpen, speaker, talk, track }: SpeakerModalProps) {
+  const speakerAvatar = speaker?.avatar && urlFor(speaker.avatar).width(800).auto("format").url();
+
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Portal>
@@ -31,7 +32,7 @@ export default function SpeakerModal({ open, setOpen, speaker, talk, track }: Sp
             <figure className="flex flex-col gap-4 md:flex-row md:items-center">
               <div className="relative overflow-hidden size-36" style={{ backgroundColor: track?.color }}>
                 <img src={AvatarBG.src} alt="" className="absolute inset-0 size-full object-cover" />
-                <img alt={speaker?.name} src={speaker?.avatar} className="relative size-full object-cover max-w-full" />
+                <img alt={speaker?.name} src={speakerAvatar} className="relative size-full object-cover max-w-full" />
               </div>
               <figcaption className="flex flex-col gap-1">
                 <Dialog.Title className="preset-3 text-neutral-100 lowercase">{speaker?.name}</Dialog.Title>

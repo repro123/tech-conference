@@ -5,10 +5,14 @@ import Button from "@/components/ui/Button";
 
 import SpeakersCards from "@components/speakers-page/SpeakersCards.astro";
 
-import ConferenceData from "@lib/data/data.json";
-const featuredSpeakers = ConferenceData.speakers.filter((speaker) => speaker.featured);
-const talks = ConferenceData.talks;
-const tracks = ConferenceData.tracks;
+import { getSpeakers } from "@/lib/sanity/speakers";
+import { getTracks } from "@/lib/sanity/tracks";
+import { getTalks } from "@/lib/sanity/talks";
+
+const tracks = await getTracks();
+const allSpeakers = await getSpeakers();
+const featuredSpeakers = allSpeakers.filter((speaker) => speaker.featured);
+const talks = await getTalks();
 ---
 
 <section>

@@ -1,8 +1,7 @@
 ---
-import type { Track } from "@/lib/types/track";
-import type { Talk } from "@/lib/types/talk";
-import type { Speaker } from "@/lib/types/speaker";
+import type { Track, Talk, Speaker } from "@lib/sanity/types";
 import { Image } from "astro:assets";
+import { urlFor } from "@lib/sanity/image";
 
 import AvatarBG from "@assets/images/pattern-avatar-bg.svg";
 
@@ -20,8 +19,9 @@ const { speakers, talks, tracks } = Astro.props;
 <ul class="mt-6 grid justify-items-center gap-6 sm:grid-cols-2 sm:justify-items-stretch lg:grid-cols-4">
   {
     speakers.map((speaker) => {
-      const talk = talks.find((talk) => talk.speakerId === speaker.id);
-      const track = tracks.find((track) => track.id === talk?.trackId);
+      const talk = talks.find((talk) => talk?.speaker?._ref === speaker.id);
+      const track = tracks.find((track) => track.id === talk?.track?._ref);
+      const speakerAvatar = speaker?.avatar && urlFor(speaker.avatar).width(800).auto("format").url();
       return (
         <li class="preset-6-medium w-full border border-neutral-600 flex flex-col relative hover:border-neutral-100 shadow-[2px_2px_0] shadow-neutral-900 hover:shadow-neutral-100 hover:shadow-[2px_2px_0] has-focus-within:shadow-neutral-100 has-focus-within:border-neutral-100 group transition-all duration-450">
           <div class="relative aspect-4/3 overflow-hidden sm:aspect-square" style={{ backgroundColor: track?.color }}>
@@ -29,7 +29,7 @@ const { speakers, talks, tracks } = Astro.props;
 
             <img
               alt=""
-              src={speaker.avatar}
+              src={speakerAvatar}
               class="relative size-full object-cover max-w-full group-hover:scale-110 transition-all duration-450"
               loading="lazy"
             />
