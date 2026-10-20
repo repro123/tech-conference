@@ -2,13 +2,16 @@
 import Container from "@/layouts/Container.astro";
 import SecondaryHeading from "@/components/ui/SecondaryHeading.astro";
 import Button from "@/components/ui/Button";
-
 import ScheduleCards from "@components/schedule/ScheduleCards.astro";
 
-import ConferenceData from "@lib/data/data.json";
-const speakers = ConferenceData.speakers;
-const talks = ConferenceData.talks.filter((talk) => talk.highlighted);
-const tracks = ConferenceData.tracks;
+import { getSpeakers } from "@/lib/sanity/speakers";
+import { getTracks } from "@/lib/sanity/tracks";
+import { getTalks } from "@/lib/sanity/talks";
+
+const tracks = await getTracks();
+const speakers = await getSpeakers();
+const allTalks = await getTalks();
+const talks = allTalks.filter((talk) => talk.highlighted);
 ---
 
 <section>
